@@ -1,0 +1,25 @@
+{
+  "name": "daisy-web",
+  "description": "Web-based DAISY e-book format reader",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "start": "sirv public"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^13.0.0",
+    "@rollup/plugin-node-resolve": "^8.0.0",
+    "rollup": "^2.3.4",
+    "rollup-plugin-livereload": "^1.0.0",
+    "rollup-plugin-svelte": "^5.0.3",
+    "rollup-plugin-terser": "^6.1.0",
+    "svelte": "^3.0.0"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^3.17.4",
+    "jszip": "^3.5.0",
+    "sirv-cli": "^1.0.0"
+  }
+}
