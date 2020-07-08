@@ -29,10 +29,16 @@ describe("Parse XML to DOM compatible format", () => {
 
     expect(parseXml(input + input)).toEqual(output + output);
   });
+
+  it("should parse imggroup", () => {
+    expect(parseXml('<imggroup><img src="x"></imggroup>')).toEqual(
+      '<figure><img src="x"></figure>'
+    );
+  });
 });
 
-describe("Manipulate XML Dom", () => {
-  it("should embed images", () => {
+describe("Embed Document Images", () => {
+  it.skip("should embed images", () => {
     const root = document.createElement("div");
     const group = document.createElement("imggroup");
     const img = document.createElement("img");

@@ -1,11 +1,9 @@
-export const parseNode = (element) => {
+export const parseNode = () => (element) => {
   // console.log(element.tagName);
 
   switch (element.tagName.toUpperCase()) {
     case "IMGGROUP":
       element.outerHTML = element.outerHTML.replace(/imggroup/g, "figure");
-      break;
-    case "IMG":
       break;
     default:
       break;
@@ -25,5 +23,6 @@ export const parseXml = (xml) => {
     .replace(/<level(\d)>/g, '<div class="level level-$1">')
     .replace(/<\/level\d>/g, "</div>")
     .replace(/<sent/g, "<span")
-    .replace(/<\/sent>/g, "</span>");
+    .replace(/<\/sent>/g, "</span>")
+    .replace(/(<\/?)imggroup/g, "$1figure");
 };
