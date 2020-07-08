@@ -14,6 +14,10 @@
       console.warn(error);
     }
   };
+
+  const press = event => {
+    console.log(`Pressed`, event.target);
+  };
 </script>
 
 <main>
@@ -22,7 +26,7 @@
     type="file"
     name="file"
     accept="application/zip" />
-  <div id="content">
+  <div id="content" on:click={press}>
     {@html content}
   </div>
 </main>
