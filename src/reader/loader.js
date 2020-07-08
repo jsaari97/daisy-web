@@ -1,6 +1,7 @@
 import JSZip from "jszip/dist/jszip.min.js";
-import { DOMParser } from "xmldom";
+// import { DOMParser } from "xmldom";
 import xpath from "xpath";
+import { parseNode, parseXml } from "./dom";
 
 export const findEntryFile = (files) => {
   return Object.keys(files).find((file) => file.match(/\.xml$/)) || null;
@@ -38,10 +39,7 @@ export const loadFile = async (file) => {
 
     const entryXml = await zip.file(name).async("string");
 
-    const doc = new DOMParser().parseFromString(
-      entryXml.replace('xmlns="', 'xmlns:conf="'),
-      "text/xml"
-    );
+    const doc = new DOMParser().parseFromString(parseXml(entryXml), "text/xml");
 
     const select = xpath.useNamespaces({
       dtbook: "http://www.daisy.org/z3986/2005/dtbook/",
@@ -49,7 +47,11 @@ export const loadFile = async (file) => {
 
     const meta = constructMeta(select("//head/meta", doc));
 
-    console.log(meta);
+    const root = select("//bodymatter/div", doc)[0];
+
+    const html = parseNode(root);
+
+    return html;
   } catch (error) {
     console.warn(error);
   }
