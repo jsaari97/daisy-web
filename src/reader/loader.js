@@ -1,7 +1,7 @@
 import JSZip from "jszip/dist/jszip.min.js";
 // import { DOMParser } from "xmldom";
 import xpath from "xpath";
-import { parseNode, parseXml } from "./dom";
+import { parseNode, parseXml, embedImages } from "./dom";
 
 export const findEntryFile = (files) => {
   return Object.keys(files).find((file) => file.match(/\.xml$/)) || null;
@@ -48,6 +48,10 @@ export const loadFile = async (file) => {
     const meta = constructMeta(select("//head/meta", doc));
 
     const root = select("//bodymatter/div", doc)[0];
+
+    const images = select("//img", root);
+
+    await Promise.all(images.map(embedImages(zip)));
 
     const html = parseNode(root);
 

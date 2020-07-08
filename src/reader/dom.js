@@ -1,4 +1,4 @@
-export const parseNode = () => (element) => {
+export const parseNode = (element) => {
   // console.log(element.tagName);
 
   switch (element.tagName.toUpperCase()) {
@@ -25,4 +25,23 @@ export const parseXml = (xml) => {
     .replace(/<sent/g, "<span")
     .replace(/<\/sent>/g, "</span>")
     .replace(/(<\/?)imggroup/g, "$1figure");
+};
+
+export const embedImages = (zip) => async (element) => {
+  try {
+    const src = element.getAttribute("src");
+    const [match] = zip.file(new RegExp(`\/${src}$`));
+
+    if (!match) {
+      return;
+    }
+
+    const data = await zip.file(match.name).async("base64");
+
+    const format = match.name.match(/\.(.*)$/);
+
+    element.setAttribute("src", `data:image/${format[1]};base64,${data}`);
+  } catch (error) {
+    console.warn(error);
+  }
 };

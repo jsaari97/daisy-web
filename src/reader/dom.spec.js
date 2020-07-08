@@ -1,4 +1,4 @@
-import { parseXml, parseNode } from "./dom";
+import { parseXml, parseNode, embedImages } from "./dom";
 
 describe("Parse XML to DOM compatible format", () => {
   it("should toggle xml namespace", () => {
@@ -38,18 +38,30 @@ describe("Parse XML to DOM compatible format", () => {
 });
 
 describe("Embed Document Images", () => {
-  it.skip("should embed images", () => {
-    const root = document.createElement("div");
-    const group = document.createElement("imggroup");
+  it("should embed images", async () => {
     const img = document.createElement("img");
-    img.src = "image.png";
+    img.setAttribute("src", "image.png");
     img.setAttribute("smilref", "test");
 
-    root.appendChild(group);
-    group.appendChild(img);
+    const zip = {
+      file: (name) => {
+        if (typeof name === "object") {
+          return [{ name: "folder/image.png" }];
+        }
 
-    const result = parseNode(root);
+        return {
+          async: () =>
+            new Promise((resolve) =>
+              resolve(Buffer.from("test").toString("base64"))
+            ),
+        };
+      },
+    };
 
-    expect(result.children[0].tagName).toEqual("FIGURE");
+    await embedImages(zip)(img);
+
+    expect(img.getAttribute("src")).toEqual(
+      `data:image/png;base64,${Buffer.from("test").toString("base64")}`
+    );
   });
 });
