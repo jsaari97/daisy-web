@@ -1,7 +1,12 @@
 export const parseNode = (element) => {
   // console.log(element.tagName);
 
-  switch (element.tagName) {
+  switch (element.tagName.toUpperCase()) {
+    case "IMGGROUP":
+      element.outerHTML = element.outerHTML.replace(/imggroup/g, "figure");
+      break;
+    case "IMG":
+      break;
     default:
       break;
   }

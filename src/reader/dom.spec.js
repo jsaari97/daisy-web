@@ -1,4 +1,4 @@
-const { parseXml } = require("./dom");
+import { parseXml, parseNode } from "./dom";
 
 describe("Parse XML to DOM compatible format", () => {
   it("should toggle xml namespace", () => {
@@ -28,5 +28,22 @@ describe("Parse XML to DOM compatible format", () => {
     expect(parseXml(input)).toEqual(output);
 
     expect(parseXml(input + input)).toEqual(output + output);
+  });
+});
+
+describe("Manipulate XML Dom", () => {
+  it("should embed images", () => {
+    const root = document.createElement("div");
+    const group = document.createElement("imggroup");
+    const img = document.createElement("img");
+    img.src = "image.png";
+    img.setAttribute("smilref", "test");
+
+    root.appendChild(group);
+    group.appendChild(img);
+
+    const result = parseNode(root);
+
+    expect(result.children[0].tagName).toEqual("FIGURE");
   });
 });
