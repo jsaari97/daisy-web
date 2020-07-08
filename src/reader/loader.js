@@ -1,5 +1,6 @@
 import JSZip from "jszip/dist/jszip.min.js";
-import parser from "fast-xml-parser";
+import { DOMParser } from "xmldom";
+import xpath from "xpath";
 
 export const findEntryFile = (files) => {
   return Object.keys(files).find((file) => file.match(/\.xml$/)) || null;
@@ -19,8 +20,8 @@ const defaultMeta = {
 
 export const constructMeta = (metaList) => {
   return metaList.reduce((meta, item) => {
-    const key = item.__name.split(":")[1].toLowerCase();
-    const value = item.__content;
+    const key = item.getAttribute("name").split(":")[1].toLowerCase();
+    const value = item.getAttribute("content");
 
     return {
       ...meta,
@@ -37,12 +38,18 @@ export const loadFile = async (file) => {
 
     const entryXml = await zip.file(name).async("string");
 
-    const entry = parser.parse(entryXml, {
-      ignoreAttributes: false,
-      attributeNamePrefix: "__",
+    const doc = new DOMParser().parseFromString(
+      entryXml.replace('xmlns="', 'xmlns:conf="'),
+      "text/xml"
+    );
+
+    const select = xpath.useNamespaces({
+      dtbook: "http://www.daisy.org/z3986/2005/dtbook/",
     });
 
-    console.log(entry);
+    const meta = constructMeta(select("//head/meta", doc));
+
+    console.log(meta);
   } catch (error) {
     console.warn(error);
   }

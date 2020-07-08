@@ -24,7 +24,8 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
-    "fast-xml-parser": "^3.17.4",
-    "jszip": "^3.5.0"
+    "jszip": "^3.5.0",
+    "xmldom": "^0.3.0",
+    "xpath": "^0.0.27"
   }
 }

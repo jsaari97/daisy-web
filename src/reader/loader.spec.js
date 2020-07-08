@@ -1,5 +1,17 @@
 import { findEntryFile, constructMeta } from "./loader";
 
+const createElement = (tagName, attributes) => {
+  const element = document.createElement(tagName);
+
+  if (attributes) {
+    for (const key in attributes) {
+      element.setAttribute(key, attributes[key]);
+    }
+  }
+
+  return element;
+};
+
 describe("findEntryFile", () => {
   it("should find entry file", () => {
     expect(findEntryFile({ "test.xml": null, "test.html": null })).toEqual(
@@ -15,18 +27,20 @@ describe("findEntryFile", () => {
 describe("constructMeta", () => {
   it("should return correct format", () => {
     const meta = [
-      { __content: "version", __name: "dt:version" },
-      { __content: "uid", __name: "dtb:uid" },
-      { __content: "Title", __name: "dc:Title" },
-      { __content: "Creator", __name: "dc:Creator" },
-      { __content: "Date", __name: "dc:Date" },
-      { __content: "Publisher", __name: "dc:Publisher" },
-      { __content: "Subject", __name: "dc:Subject" },
-      { __content: "Identifier", __name: "dc:Identifier" },
-      { __content: "Language", __name: "dc:Language" },
+      { content: "version", name: "dt:version" },
+      { content: "uid", name: "dtb:uid" },
+      { content: "Title", name: "dc:Title" },
+      { content: "Creator", name: "dc:Creator" },
+      { content: "Date", name: "dc:Date" },
+      { content: "Publisher", name: "dc:Publisher" },
+      { content: "Subject", name: "dc:Subject" },
+      { content: "Identifier", name: "dc:Identifier" },
+      { content: "Language", name: "dc:Language" },
     ];
 
-    expect(constructMeta(meta)).toEqual({
+    const elements = meta.map((attrs) => createElement("meta", attrs));
+
+    expect(constructMeta(elements)).toEqual({
       version: "version",
       uid: "uid",
       title: "Title",
@@ -41,16 +55,18 @@ describe("constructMeta", () => {
 
   it("should handle missing properties", () => {
     const meta = [
-      { __content: "uid", __name: "dtb:uid" },
-      { __content: "Title", __name: "dc:Title" },
-      { __content: "Creator", __name: "dc:Creator" },
-      { __content: "Date", __name: "dc:Date" },
-      { __content: "Publisher", __name: "dc:Publisher" },
-      { __content: "Subject", __name: "dc:Subject" },
-      { __content: "Identifier", __name: "dc:Identifier" },
+      { content: "uid", name: "dtb:uid" },
+      { content: "Title", name: "dc:Title" },
+      { content: "Creator", name: "dc:Creator" },
+      { content: "Date", name: "dc:Date" },
+      { content: "Publisher", name: "dc:Publisher" },
+      { content: "Subject", name: "dc:Subject" },
+      { content: "Identifier", name: "dc:Identifier" },
     ];
 
-    expect(constructMeta(meta)).toEqual({
+    const elements = meta.map((attrs) => createElement("meta", attrs));
+
+    expect(constructMeta(elements)).toEqual({
       version: null,
       uid: "uid",
       title: "Title",
