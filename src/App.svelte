@@ -1,5 +1,6 @@
 <script>
   import { loadFile } from "./reader/loader";
+  import { readNode } from "./reader/reader";
 
   let content = "";
   let zip;
@@ -19,12 +20,12 @@
   };
 
   const press = event => {
-    console.log(`Pressed`, event.target);
+    readNode(event.target, console.log);
   };
 
   const read = () => {
     if (ref && ref.children.length) {
-      console.log('initialize');
+      console.log("initialize");
     }
   };
 
