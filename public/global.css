@@ -462,6 +462,7 @@ code {
 
 #content {
   max-width: 820px;
+  width: calc(100% - 2rem);
   margin: 4rem auto;
 }
 
@@ -470,7 +471,7 @@ pagenum {
 }
 
 figure {
-  margin: 1.5rem auto;
+  margin: 1.5rem;
 }
 
 img {
