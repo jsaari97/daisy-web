@@ -1,22 +1,3 @@
-export const parseNode = (element) => {
-  // console.log(element.tagName);
-
-  switch (element.tagName.toUpperCase()) {
-    case "IMGGROUP":
-      element.outerHTML = element.outerHTML.replace(/imggroup/g, "figure");
-      break;
-    default:
-      break;
-  }
-
-  // recursion
-  if (element.children.length) {
-    Array.from(element.children).map(parseNode);
-  }
-
-  return element;
-};
-
 export const parseXml = (xml) => {
   return xml
     .replace('xmlns="', 'xmlns:conf="')
@@ -44,4 +25,33 @@ export const embedImages = (zip) => async (element) => {
   } catch (error) {
     console.warn(error);
   }
+};
+
+export const transformList = (element) => {
+  const type = element.getAttribute("type");
+  const enumType = element.getAttribute("enum") || "1";
+
+  if (type === "ol" && enumType) {
+    element.setAttribute("type", enumType);
+  } else {
+    element.removeAttribute("type");
+  }
+
+  changeElementType(element, type);
+};
+
+const changeElementType = (element, newType) => {
+  const newElement = document.createElement(newType);
+
+  // Move children
+  while (element.firstChild) {
+    newElement.appendChild(element.firstChild);
+  }
+
+  // Copy attributes
+  for (let i = 0, a = element.attributes, l = a.length; i < l; i++) {
+    newElement.setAttribute(a[i].name, a[i].value);
+  }
+
+  element.parentNode.replaceChild(newElement, element);
 };

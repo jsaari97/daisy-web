@@ -1,7 +1,6 @@
 import JSZip from "jszip/dist/jszip.min.js";
-// import { DOMParser } from "xmldom";
 import xpath from "xpath";
-import { parseNode, parseXml, embedImages } from "./dom";
+import { parseXml, embedImages, transformList } from "./dom";
 
 export const findEntryFile = (files) => {
   return Object.keys(files).find((file) => file.match(/\.xml$/)) || null;
@@ -31,6 +30,8 @@ export const constructMeta = (metaList) => {
   }, defaultMeta);
 };
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export const loadFile = async (file) => {
   try {
     const zip = await JSZip.loadAsync(file);
@@ -49,13 +50,11 @@ export const loadFile = async (file) => {
 
     const root = select("//bodymatter/div", doc)[0];
 
-    const images = select("//img", root);
+    await Promise.all(select("//img", root).map(embedImages(zip)));
 
-    await Promise.all(images.map(embedImages(zip)));
+    select("//list", root).forEach(transformList);
 
-    const html = parseNode(root);
-
-    return html;
+    return root;
   } catch (error) {
     console.warn(error);
   }

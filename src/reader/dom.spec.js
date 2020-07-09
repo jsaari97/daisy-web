@@ -1,4 +1,4 @@
-import { parseXml, parseNode, embedImages } from "./dom";
+import { parseXml, embedImages, transformList } from "./dom";
 
 describe("Parse XML to DOM compatible format", () => {
   it("should toggle xml namespace", () => {
@@ -63,5 +63,39 @@ describe("Embed Document Images", () => {
     expect(img.getAttribute("src")).toEqual(
       `data:image/png;base64,${Buffer.from("test").toString("base64")}`
     );
+  });
+});
+
+describe("Transform Lists", () => {
+  it("should handle unordered lists", () => {
+    const root = document.createElement("div");
+    const list = document.createElement("list");
+    const item = document.createElement("li");
+
+    root.appendChild(list);
+    list.appendChild(item);
+
+    list.setAttribute("type", "ul");
+
+    transformList(list);
+
+    expect(root.children[0].tagName).toEqual("UL");
+  });
+
+  it("should handle ordered lists", () => {
+    const root = document.createElement("div");
+    const list = document.createElement("list");
+    const item = document.createElement("li");
+
+    root.appendChild(list);
+    list.appendChild(item);
+
+    list.setAttribute("type", "ol");
+    list.setAttribute("enum", "a");
+
+    transformList(list);
+
+    expect(root.children[0].tagName).toEqual("OL");
+    expect(root.children[0].getAttribute("type")).toEqual("a");
   });
 });
