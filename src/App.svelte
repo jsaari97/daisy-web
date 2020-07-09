@@ -2,7 +2,8 @@
   import { loadFile } from "./reader/loader";
 
   let content = "";
-  let zip = null;
+  let zip;
+  let ref;
 
   const handleZip = async event => {
     try {
@@ -20,6 +21,14 @@
   const press = event => {
     console.log(`Pressed`, event.target);
   };
+
+  const read = () => {
+    if (ref && ref.children.length) {
+      console.log('initialize');
+    }
+  };
+
+  $: content, setTimeout(read, 0);
 </script>
 
 <main>
@@ -29,7 +38,7 @@
     type="file"
     name="file"
     accept="application/zip" />
-  <div id="content" on:click={press}>
+  <div id="content" bind:this={ref} on:click={press}>
     {@html content}
   </div>
 </main>
