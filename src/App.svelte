@@ -1,6 +1,6 @@
 <script>
   import { loadFile } from "./reader/loader";
-  import { readNode } from "./reader/reader";
+  import { readNode, handleNode } from "./reader/reader";
 
   let content = "";
   let zip;
@@ -19,8 +19,8 @@
     }
   };
 
-  const press = event => {
-    readNode(event.target, console.log);
+  const press = async event => {
+    await readNode(event.target, handleNode(zip));
   };
 
   const read = () => {

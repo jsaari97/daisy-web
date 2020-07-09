@@ -18,7 +18,7 @@ describe("DOM Walker", () => {
     expect(handle).toHaveBeenCalledTimes(1)
   });
 
-  it("should call handle", () => {
+  it("should call handle", async () => {
     const root = document.createElement('div')
     const list = document.createElement('ul')
     const item = document.createElement('li')
@@ -30,7 +30,7 @@ describe("DOM Walker", () => {
 
     const handle = jest.fn()
 
-    readNode(item, handle)
+    await readNode(item, handle)
 
     expect(handle).toHaveBeenCalledTimes(0)
   });
