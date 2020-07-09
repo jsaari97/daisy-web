@@ -54,7 +54,11 @@ export const loadFile = async (file) => {
 
     select("//list", root).forEach(transformList);
 
-    return root;
+    return {
+      dom: root,
+      meta,
+      zip,
+    };
   } catch (error) {
     console.warn(error);
   }

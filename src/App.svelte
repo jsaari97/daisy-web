@@ -2,14 +2,16 @@
   import { loadFile } from "./reader/loader";
 
   let content = "";
+  let zip = null;
 
   const handleZip = async event => {
     try {
       const [file] = event.target.files;
 
-      const html = await loadFile(file);
+      const { dom, zip: zipObj } = await loadFile(file);
 
-      content = html.parentElement.innerHTML;
+      content = dom.parentElement.innerHTML;
+      zip = zipObj;
     } catch (error) {
       console.warn(error);
     }
