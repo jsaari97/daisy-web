@@ -25,6 +25,7 @@
 <main>
   <input
     on:change={handleZip}
+    aria-label="File"
     type="file"
     name="file"
     accept="application/zip" />
