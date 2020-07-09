@@ -22,7 +22,7 @@
 
   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-  const play = audio =>
+  const play = (audio, element) =>
     new Promise(async resolve => {
       try {
         audioRef.src = audio;
@@ -30,6 +30,7 @@
         const handleEnd = () => {
           audioRef.pause();
           audioRef.removeEventListener("pause", handleEnd);
+          element.style.background = 'transparent';
 
           return resolve();
         };
@@ -37,6 +38,7 @@
         const handlePlay = async () => {
           audioRef.addEventListener("pause", handleEnd);
           audioRef.removeEventListener("canplaythrough", handlePlay);
+          element.style.background = 'yellow';
 
           await sleep(200);
 
