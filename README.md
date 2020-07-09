@@ -1,6 +1,6 @@
 # DAISY web reader
 
-Web-based DAISY e-book format reader
+A web-based DAISY 3 standard compatible e-book reader with text-to-speech support.
 
 ## LICENSE
 
