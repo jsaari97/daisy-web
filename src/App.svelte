@@ -16,7 +16,7 @@
       content = dom.parentElement.innerHTML;
       zip = zipObj;
     } catch (error) {
-      console.warn(error);
+      return Promise.reject(error);
     }
   };
 
@@ -27,41 +27,41 @@
       try {
         audioRef.src = audio;
 
-        const handleEnd = () => {
+        const onCompleted = () => {
           audioRef.pause();
-          audioRef.removeEventListener("pause", handleEnd);
-          element.style.background = 'transparent';
+          audioRef.removeEventListener("pause", onCompleted);
+          element.style.background = "transparent";
 
           return resolve();
         };
 
-        const handlePlay = async () => {
-          audioRef.addEventListener("pause", handleEnd);
-          audioRef.removeEventListener("canplaythrough", handlePlay);
-          element.style.background = 'yellow';
+        const onStart = async () => {
+          audioRef.addEventListener("pause", onCompleted);
+          audioRef.removeEventListener("canplaythrough", onStart);
+          element.style.background = "yellow";
 
           await sleep(200);
 
           audioRef.play();
         };
 
-        audioRef.addEventListener("canplaythrough", handlePlay);
+        audioRef.addEventListener("canplaythrough", onStart);
       } catch (error) {
-        console.warn(error);
+        return Promise.reject(error);
       }
     });
 
-  const press = async event => {
+  const onTextSelect = async event => {
     await readNode(event.target, handleNode(zip, play));
   };
 
-  const read = () => {
+  const onLoad = () => {
     if (ref && ref.children.length) {
       console.log("loaded");
     }
   };
 
-  $: content, setTimeout(read, 0);
+  $: content, setTimeout(onLoad, 0);
 </script>
 
 <main>
@@ -71,7 +71,7 @@
     type="file"
     name="file"
     accept="application/zip" />
-  <div id="content" bind:this={ref} on:click={press}>
+  <div id="content" bind:this={ref} on:click={onTextSelect}>
     {@html content}
   </div>
   <audio loop="false" bind:this={audioRef} />
