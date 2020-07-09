@@ -5,6 +5,7 @@
   let content = "";
   let zip;
   let ref;
+  let audioRef;
 
   const handleZip = async event => {
     try {
@@ -19,13 +20,42 @@
     }
   };
 
+  const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+  const play = audio =>
+    new Promise(async resolve => {
+      try {
+        audioRef.src = audio;
+
+        const handleEnd = () => {
+          audioRef.pause();
+          audioRef.removeEventListener("pause", handleEnd);
+
+          return resolve();
+        };
+
+        const handlePlay = async () => {
+          audioRef.addEventListener("pause", handleEnd);
+          audioRef.removeEventListener("canplaythrough", handlePlay);
+
+          await sleep(200);
+
+          audioRef.play();
+        };
+
+        audioRef.addEventListener("canplaythrough", handlePlay);
+      } catch (error) {
+        console.warn(error);
+      }
+    });
+
   const press = async event => {
-    await readNode(event.target, handleNode(zip));
+    await readNode(event.target, handleNode(zip, play));
   };
 
   const read = () => {
     if (ref && ref.children.length) {
-      console.log("initialize");
+      console.log("loaded");
     }
   };
 
@@ -42,4 +72,5 @@
   <div id="content" bind:this={ref} on:click={press}>
     {@html content}
   </div>
+  <audio loop="false" bind:this={audioRef} />
 </main>

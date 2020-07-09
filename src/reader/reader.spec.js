@@ -1,4 +1,4 @@
-import { readNode } from "./reader";
+import { readNode, convertToSeconds } from "./reader";
 
 describe("DOM Walker", () => {
   it("should traverse the tree", () => {
@@ -35,3 +35,12 @@ describe("DOM Walker", () => {
     expect(handle).toHaveBeenCalledTimes(0)
   });
 });
+
+describe('Timestamp Conversion', () => {
+  it('should convert to seconds', () => {
+    expect(convertToSeconds('0:00:02')).toEqual(2);
+    expect(convertToSeconds('0:00:13.055')).toEqual(13.055);
+    expect(convertToSeconds('0:15:13.7')).toEqual(913.7);
+    expect(convertToSeconds('1:15:16')).toEqual(4516);
+  })
+})

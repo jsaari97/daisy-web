@@ -1,4 +1,4 @@
-import JSZip from "jszip/dist/jszip.min.js";
+import JSZip from "jszip/dist/jszip.js";
 import xpath from "xpath";
 import { parseXml, embedImages, transformList } from "./dom";
 
@@ -29,8 +29,6 @@ export const constructMeta = (metaList) => {
     };
   }, defaultMeta);
 };
-
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const loadFile = async (file) => {
   try {
