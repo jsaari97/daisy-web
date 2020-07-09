@@ -32,7 +32,8 @@ export const readNode = async (element, handle, visited) => {
 };
 
 export const getMediaPaths = (name, files) => {
-  return Object.keys(files).filter((file) => file.includes(name));
+  const re = new RegExp(`\/${name}\\.`, "g");
+  return Object.keys(files).filter((file) => file.match(re));
 };
 
 export const loadAudio = async (path, zip) => {
@@ -65,22 +66,21 @@ export const convertToSeconds = (timestamp) => {
   return h * 60 * 60 + m * 60 + s;
 };
 
-export const loadSmilMetadata = async (path, id, zip) => {
+export const loadSmilMetadata = async (dom, id) => {
   try {
-    const doc = await loadSmilDom(path, zip);
-
-    const [element] = xpath.select(`//*[@id="${id}"]/audio`, doc);
+    const [element] = xpath.select(`//*[@id="${id}"]/audio`, dom);
 
     if (!element) {
-      return Promise.reject("empty");
+      return Promise.reject("IS_PASSTHROUGH");
     }
 
     const start = element.getAttribute("clipBegin");
     const end = element.getAttribute("clipEnd");
 
-    console.log(id, start, end);
-
-    return { start: convertToSeconds(start), end: convertToSeconds(end) };
+    return {
+      start: convertToSeconds(start),
+      end: convertToSeconds(end),
+    };
   } catch (error) {
     return Promise.reject(error);
   }
@@ -88,6 +88,7 @@ export const loadSmilMetadata = async (path, id, zip) => {
 
 /**
  * @param {JSZip} zip
+ * @param {(audioUrl: string, target: Element) => Promise<void>} play
  * @returns {(element: Element) => Promise<void>}
  */
 export const handleNode = (zip, play) => async (element) => {
@@ -102,15 +103,19 @@ export const handleNode = (zip, play) => async (element) => {
 
     const [audioPath, smilPath] = getMediaPaths(name, zip.files);
 
-    const audioUrl = await loadAudio(audioPath, zip);
+    const audioBlob = await loadAudio(audioPath, zip);
 
-    const { start, end } = await loadSmilMetadata(smilPath, id, zip);
+    const dom = await loadSmilDom(smilPath, zip);
 
-    await play(
-      `${audioUrl}#t=${Math.max(0, start + 0.125)}${end ? `,${end - 0.2}` : ""}`
-    );
+    const { start, end } = await loadSmilMetadata(dom, id);
+
+    const audioUrl = `${audioBlob}#t=${Math.max(0, start + 0.125)}${
+      end ? `,${end - 0.175}` : ""
+    }`;
+
+    await play(audioUrl, element);
   } catch (error) {
-    if (error === "empty") {
+    if (error === "IS_PASSTHROUGH") {
       return;
     }
 
