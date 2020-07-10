@@ -1,17 +1,5 @@
 import { findEntryFile, constructMeta } from "./loader";
 
-const createElement = (tagName, attributes) => {
-  const element = document.createElement(tagName);
-
-  if (attributes) {
-    for (const key in attributes) {
-      element.setAttribute(key, attributes[key]);
-    }
-  }
-
-  return element;
-};
-
 describe("findEntryFile", () => {
   it("should find entry file", () => {
     expect(findEntryFile({ "test.xml": null, "test.html": null })).toEqual(

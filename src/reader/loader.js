@@ -30,6 +30,10 @@ export const constructMeta = (metaList) => {
   }, defaultMeta);
 };
 
+/**
+ * 
+ * @param {File} file 
+ */
 export const loadFile = async (file) => {
   try {
     const zip = await JSZip.loadAsync(file);

@@ -2,12 +2,8 @@ import { parseXml, embedImages, transformList } from "./dom";
 
 describe("Parse XML to DOM compatible format", () => {
   it("should toggle xml namespace", () => {
-    expect(
-      parseXml(
-        '<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/"></dtbook>'
-      )
-    ).toEqual(
-      '<dtbook xmlns:conf="http://www.daisy.org/z3986/2005/dtbook/"></dtbook>'
+    expect(parseXml('<dtbook xmlns="ns"></dtbook>')).toEqual(
+      '<dtbook xmlns:conf="ns"></dtbook>'
     );
   });
 
@@ -39,9 +35,7 @@ describe("Parse XML to DOM compatible format", () => {
 
 describe("Embed Document Images", () => {
   it("should embed images", async () => {
-    const img = document.createElement("img");
-    img.setAttribute("src", "image.png");
-    img.setAttribute("smilref", "test");
+    const img = createElement("img", { src: "image.png", smilref: "test" });
 
     const zip = {
       file: (name) => {
@@ -68,14 +62,12 @@ describe("Embed Document Images", () => {
 
 describe("Transform Lists", () => {
   it("should handle unordered lists", () => {
-    const root = document.createElement("div");
-    const list = document.createElement("list");
-    const item = document.createElement("li");
+    const root = createElement("div");
+    const list = createElement("list", { type: "ul" });
+    const item = createElement("li");
 
     root.appendChild(list);
     list.appendChild(item);
-
-    list.setAttribute("type", "ul");
 
     transformList(list);
 
@@ -83,15 +75,12 @@ describe("Transform Lists", () => {
   });
 
   it("should handle ordered lists", () => {
-    const root = document.createElement("div");
-    const list = document.createElement("list");
-    const item = document.createElement("li");
+    const root = createElement("div");
+    const list = createElement("list", { type: "ol", enum: "a" });
+    const item = createElement("li");
 
     root.appendChild(list);
     list.appendChild(item);
-
-    list.setAttribute("type", "ol");
-    list.setAttribute("enum", "a");
 
     transformList(list);
 
