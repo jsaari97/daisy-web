@@ -1,4 +1,4 @@
-import { readNode, convertToSeconds, getMediaPaths } from "./reader";
+import { readContentDOM } from "./reader";
 
 describe("DOM Walker", () => {
   it("should traverse the tree", () => {
@@ -11,14 +11,12 @@ describe("DOM Walker", () => {
 
     item.setAttribute("smilref", "test");
 
-    const handle = jest.fn();
+    const walker = readContentDOM(root)
 
-    readNode(root, handle);
-
-    expect(handle).toHaveBeenCalledTimes(1);
+    expect(walker.next().value).toBe(item);
   });
 
-  it("should call handle", async () => {
+  it("should traverse upwards", async () => {
     const root = document.createElement("div");
     const list = document.createElement("ul");
     const item = document.createElement("li");
@@ -26,39 +24,33 @@ describe("DOM Walker", () => {
     root.appendChild(list);
     list.appendChild(item);
 
+    item.setAttribute("smilref", "test");
     list.setAttribute("smilref", "test");
 
-    const handle = jest.fn();
+    const walker = readContentDOM(list)
 
-    await readNode(item, handle);
-
-    expect(handle).toHaveBeenCalledTimes(0);
+    expect(walker.next().value).toBe(list);
+    expect(walker.next().value).toBe(item);
   });
-});
 
-describe("Timestamp Conversion", () => {
-  it("should convert to seconds", () => {
-    expect(convertToSeconds("0:00:02")).toEqual(2);
-    expect(convertToSeconds("0:00:13.055")).toEqual(13.055);
-    expect(convertToSeconds("0:15:13.7")).toEqual(913.7);
-    expect(convertToSeconds("1:15:16")).toEqual(4516);
-  });
-});
+  it("should traverse siblings", async () => {
+    const list = document.createElement("ul");
+    const item1 = document.createElement("li");
+    const item2 = document.createElement("li");
+    const item3 = document.createElement("li");
 
-describe("Media Paths", () => {
-  it("should return media and document tuple", () => {
-    const files = ["folder/test", "folder/test2", "folder/test3"].reduce(
-      (acc, cur) => ({
-        ...acc,
-        [`${cur}.mp3`]: null,
-        [`${cur}.smil`]: null,
-      }),
-      {}
-    );
+    list.appendChild(item1);
+    list.appendChild(item2);
+    list.appendChild(item3);
 
-    expect(getMediaPaths("test", files)).toEqual([
-      "folder/test.mp3",
-      "folder/test.smil",
-    ]);
+    item1.setAttribute("smilref", "test");
+    item2.setAttribute("smilref", "test");
+    item3.setAttribute("smilref", "test");
+
+    const walker = readContentDOM(item1)
+
+    expect(walker.next().value).toBe(item1);
+    expect(walker.next().value).toBe(item2);
+    expect(walker.next().value).toBe(item3);
   });
 });

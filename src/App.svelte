@@ -1,6 +1,8 @@
 <script>
+  import Controls from "./controls/controls.svelte";
   import { loadFile } from "./reader/loader";
-  import { readNode, handleNode } from "./reader/reader";
+  import { readContentDOM } from "./reader/reader";
+  import { getAudioSource } from "./reader/audio";
 
   let content = "";
   let zip;
@@ -52,7 +54,18 @@
     });
 
   const onTextSelect = async event => {
-    await readNode(event.target, handleNode(zip, play));
+    const walker = readContentDOM(event.target);
+
+    const getAudioUrl = getAudioSource(zip);
+
+    for (const element of walker) {
+      console.log(element);
+      const audioUrl = await getAudioUrl(element);
+
+      if (audioUrl) {
+        await play(audioUrl, element);
+      }
+    }
   };
 
   const onLoad = () => {
@@ -65,14 +78,20 @@
 </script>
 
 <main>
-  <input
-    on:change={handleZip}
-    aria-label="File"
-    type="file"
-    name="file"
-    accept="application/zip" />
-  <div id="content" bind:this={ref} on:click={onTextSelect}>
-    {@html content}
-  </div>
-  <audio loop="false" bind:this={audioRef} />
+  {#if !content}
+    <section class="file-input-section">
+      <input
+        on:change={handleZip}
+        aria-label="File"
+        type="file"
+        name="file"
+        accept="application/zip" />
+    </section>
+  {/if}
+  <section class="content">
+    <div id="content" bind:this={ref} on:click={onTextSelect}>
+      {@html content}
+    </div>
+  </section>
+  <audio bind:this={audioRef} />
 </main>
