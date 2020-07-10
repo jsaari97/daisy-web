@@ -41,7 +41,7 @@ export const getPlaybackRange = (dom, id) => {
   const [element] = xpath.select(`//*[@id="${id}"]/audio`, dom);
 
   if (!element) {
-    return [];
+    return null;
   }
 
   const start = element.getAttribute("clipBegin");
@@ -52,7 +52,7 @@ export const getPlaybackRange = (dom, id) => {
 
 /**
  * @param {JSZip} zip
- * @returns {(element: Element) => Promise<void>}
+ * @returns {(element: Element) => Promise<string | null>}
  */
 export const getAudioSource = (zip) => async (element) => {
   try {
@@ -72,7 +72,7 @@ export const getAudioSource = (zip) => async (element) => {
 
     const range = getPlaybackRange(dom, id);
 
-    if (!range.length) {
+    if (!range) {
       return null;
     }
 
