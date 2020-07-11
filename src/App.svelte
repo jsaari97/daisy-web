@@ -163,6 +163,7 @@
   <audio bind:this={audioRef} />
   <Controls
     {playing}
+    disabled={!content}
     onPlayToggle={togglePlay}
     onBackward={handlePrevious}
     onForward={handleForward} />

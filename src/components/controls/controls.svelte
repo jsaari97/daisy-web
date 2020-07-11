@@ -1,5 +1,8 @@
 <script>
+  import Button from "./button.svelte";
+
   export let playing = false;
+  export let disabled;
   export let onPlayToggle;
   export let onBackward;
   export let onForward;
@@ -9,25 +12,29 @@
   .controls {
     position: fixed;
     width: 100%;
-    padding: 1rem;
+    padding: 0.5rem 0;
     bottom: 0;
+    background-color: #fff;
+    border-top: 1px solid #e1e1e1;
   }
 
   .controls__container {
     max-width: 48rem;
     width: calc(100% - 2rem);
     margin: 0 auto;
+    display: flex;
+    justify-content: center;
   }
 </style>
 
 <section class="controls">
   <div class="controls__container">
-    <button on:click={onBackward} type="button">Back</button>
+    <Button {disabled} on:click={onBackward}>Backward</Button>
 
-    <button on:click={onPlayToggle} type="button">
+    <Button {disabled} on:click={onPlayToggle}>
       {playing ? 'Pause' : 'Play'}
-    </button>
+    </Button>
 
-    <button on:click={onForward} type="button">Forward</button>
+    <Button {disabled} on:click={onForward}>Forward</Button>
   </div>
 </section>
