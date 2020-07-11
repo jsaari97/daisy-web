@@ -1,8 +1,8 @@
 <script>
   export let playing = false;
   export let onPlayToggle;
-  export let onPrevious;
-  export let onNext;
+  export let onBackward;
+  export let onForward;
 </script>
 
 <style>
@@ -22,12 +22,12 @@
 
 <section class="controls">
   <div class="controls__container">
-    <button on:click={onPrevious} type="button">Back</button>
+    <button on:click={onBackward} type="button">Back</button>
 
     <button on:click={onPlayToggle} type="button">
       {playing ? 'Stop' : 'Play'}
     </button>
 
-    <button on:click={onNext} type="button">Forward</button>
+    <button on:click={onForward} type="button">Forward</button>
   </div>
 </section>

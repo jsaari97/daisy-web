@@ -1,7 +1,7 @@
 <script>
   import Controls from "./components/controls/controls.svelte";
   import { loadFile } from "./reader/loader";
-  import { readContentDOM } from "./reader/reader";
+  import { readContentDOM, lookBackward, lookForward } from "./reader/reader";
   import { getAudioSource } from "./reader/audio";
 
   let content = "";
@@ -101,9 +101,23 @@
     playing = !playing;
   };
 
-  const handlePrevious = () => {};
+  const controlHandler = handler => () => {
+    const element = handler(cursor);
 
-  const handleNext = () => {};
+    if (element) {
+      if (playing) {
+        stopPlayback();
+      }
+
+      playing = true;
+      cursor = element;
+      readDocument();
+    }
+  };
+
+  const handlePrevious = controlHandler(lookBackward);
+
+  const handleForward = controlHandler(lookForward);
 
   $: content, setTimeout(onDocumentLoad, 0);
 </script>
@@ -128,6 +142,6 @@
   <Controls
     {playing}
     onPlayToggle={togglePlay}
-    onPrevious={handlePrevious}
-    onNext={handleNext} />
+    onBackward={handlePrevious}
+    onForward={handleForward} />
 </main>
