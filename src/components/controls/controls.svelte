@@ -25,7 +25,7 @@
     <button on:click={onBackward} type="button">Back</button>
 
     <button on:click={onPlayToggle} type="button">
-      {playing ? 'Stop' : 'Play'}
+      {playing ? 'Pause' : 'Play'}
     </button>
 
     <button on:click={onForward} type="button">Forward</button>

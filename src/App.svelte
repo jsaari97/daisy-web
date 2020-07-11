@@ -119,6 +119,28 @@
 
   const handleForward = controlHandler(lookForward);
 
+  // Keyboard events
+  window.addEventListener("keydown", event => {
+    if (content) {
+      switch (event.code) {
+        case "ArrowLeft":
+          event.preventDefault();
+          handlePrevious();
+          return;
+        case "ArrowRight":
+          event.preventDefault();
+          handleForward();
+          return;
+        case "Space":
+          event.preventDefault();
+          togglePlay();
+          return;
+        default:
+          return;
+      }
+    }
+  });
+
   $: content, setTimeout(onDocumentLoad, 0);
 </script>
 
