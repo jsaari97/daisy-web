@@ -60,7 +60,7 @@ export function lookBackward(element, visited = true) {
  * @param {Element} element
  * @param {Boolean} visited
  */
-export function lookForward(element, visited = true) {
+export function lookForward(element, visited = element.attributes["smilref"]) {
   if (!element) {
     return null;
   }

@@ -55,6 +55,7 @@ describe("Find next DOM element", () => {
 
     expect(lookForward(item1)).toBe(item3);
     expect(lookForward(item3)).toBe(null);
+    expect(lookForward(list)).toBe(item1);
   });
 });
 
