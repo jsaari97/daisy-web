@@ -101,6 +101,10 @@
     playing = !playing;
   };
 
+  const handlePrevious = () => {};
+
+  const handleNext = () => {};
+
   $: content, setTimeout(onDocumentLoad, 0);
 </script>
 
@@ -121,5 +125,9 @@
     </div>
   </section>
   <audio bind:this={audioRef} />
-  <Controls {playing} onPlayToggle={togglePlay} />
+  <Controls
+    {playing}
+    onPlayToggle={togglePlay}
+    onPrevious={handlePrevious}
+    onNext={handleNext} />
 </main>
