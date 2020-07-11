@@ -1,4 +1,4 @@
-import JSZip from "jszip/dist/jszip.js";
+import JSZip from "jszip";
 import xpath from "xpath";
 
 export const findPaths = (name, files) => {
