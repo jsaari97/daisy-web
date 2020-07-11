@@ -35,12 +35,12 @@ export function* readContentDOM(from) {
  * @param {Element} element
  * @param {Boolean} visited
  */
-export function lookBackward(element, visited = true) {
+export function lookBackward(element, visited = element.attributes["smilref"]) {
   if (!element) {
     return null;
   }
 
-  if (!visited && element.attributes["smilref"]) {
+  if (!visited && element.attributes["smilref"] && !element.lastElementChild) {
     return element;
   }
 

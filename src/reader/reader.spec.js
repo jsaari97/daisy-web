@@ -63,14 +63,18 @@ describe("Find previous DOM element", () => {
   it("should find previous", () => {
     const list = createElement("ul");
     const item1 = createElement("li", { smilref: "test" });
+    const child1 = createElement("span", { smilref: "test" });
+    const child2 = createElement("span", { smilref: "test" });
     const item2 = createElement("li");
     const item3 = createElement("li", { smilref: "test" });
     const span = createElement("span", { smilref: "test" });
 
-    item3.appendChild(span);
+    item1.append(child1, child2);
+    item3.append(span);
     list.append(item1, item2, item3);
 
-    expect(lookBackward(span)).toBe(item1);
+    expect(lookBackward(child2)).toBe(child1);
     expect(lookBackward(item1)).toBe(null);
+    expect(lookBackward(span)).toBe(child2);
   });
 });
