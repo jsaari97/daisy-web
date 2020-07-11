@@ -1,5 +1,5 @@
 <script>
-  import Controls from "./controls/controls.svelte";
+  import Controls from "./components/controls/controls.svelte";
   import { loadFile } from "./reader/loader";
   import { readContentDOM } from "./reader/reader";
   import { getAudioSource } from "./reader/audio";
