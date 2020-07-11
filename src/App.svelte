@@ -7,9 +7,12 @@
   let content = "";
   let zip;
   let ref;
+  let cursor;
   let audioRef;
+  let walker;
+  let playing = false;
 
-  const handleZip = async event => {
+  const loadDocument = async event => {
     try {
       const [file] = event.target.files;
 
@@ -18,13 +21,16 @@
       content = dom.parentElement.innerHTML;
       zip = zipObj;
     } catch (error) {
-      return Promise.reject(error);
+      console.warn(error);
     }
   };
 
-  const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+  const stopPlayback = () => {
+    walker.return();
+    audioRef.pause();
+  };
 
-  const play = (audio, element) =>
+  const playAudio = (audio, element) =>
     new Promise(async resolve => {
       try {
         audioRef.src = audio;
@@ -42,8 +48,6 @@
           audioRef.removeEventListener("canplaythrough", onStart);
           element.style.background = "yellow";
 
-          await sleep(200);
-
           audioRef.play();
         };
 
@@ -53,8 +57,8 @@
       }
     });
 
-  const onTextSelect = async event => {
-    const walker = readContentDOM(event.target);
+  const readDocument = async () => {
+    walker = readContentDOM(cursor);
 
     const getAudioUrl = getAudioSource(zip);
 
@@ -63,25 +67,46 @@
       const audioUrl = await getAudioUrl(element);
 
       if (audioUrl) {
-        await play(audioUrl, element);
+        cursor = element;
+        await playAudio(audioUrl, element);
       }
     }
   };
 
-  const onLoad = () => {
+  const onContentSelect = event => {
+    if (playing) {
+      stopPlayback();
+    }
+
+    cursor = event.target;
+    playing = true;
+    readDocument();
+  };
+
+  const onDocumentLoad = () => {
     if (ref && ref.children.length) {
-      console.log("loaded");
+      cursor = ref;
     }
   };
 
-  $: content, setTimeout(onLoad, 0);
+  const togglePlay = () => {
+    if (playing) {
+      stopPlayback();
+    } else {
+      readDocument();
+    }
+
+    playing = !playing;
+  };
+
+  $: content, setTimeout(onDocumentLoad, 0);
 </script>
 
 <main>
   {#if !content}
     <section class="file-input-section">
       <input
-        on:change={handleZip}
+        on:change={loadDocument}
         aria-label="File"
         type="file"
         name="file"
@@ -89,9 +114,10 @@
     </section>
   {/if}
   <section class="content">
-    <div id="content" bind:this={ref} on:click={onTextSelect}>
+    <div id="content" bind:this={ref} on:click={onContentSelect}>
       {@html content}
     </div>
   </section>
   <audio bind:this={audioRef} />
+  <Controls {playing} onPlayToggle={togglePlay} />
 </main>
