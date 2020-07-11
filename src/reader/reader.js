@@ -29,3 +29,53 @@ export function* readContentDOM(from) {
     element = walk(element);
   }
 }
+
+/**
+ *
+ * @param {Element} element
+ * @param {Boolean} visited
+ */
+export function lookBackward(element, visited = true) {
+  if (!element) {
+    return null;
+  }
+
+  if (!visited && element.attributes["smilref"]) {
+    return element;
+  }
+
+  let next;
+
+  if (!visited && element.lastElementChild) {
+    next = element.lastElementChild;
+  } else {
+    next = element.previousElementSibling || element.parentElement;
+  }
+
+  return lookBackward(next, next === element.parentElement);
+}
+
+/**
+ *
+ * @param {Element} element
+ * @param {Boolean} visited
+ */
+export function lookForward(element, visited = true) {
+  if (!element) {
+    return null;
+  }
+
+  if (!visited && element.attributes["smilref"]) {
+    return element;
+  }
+
+  let next;
+
+  if (!visited && element.firstElementChild) {
+    next = element.firstElementChild;
+  } else {
+    next = element.nextElementSibling || element.parentElement;
+  }
+
+  return lookForward(next, next === element.parentElement);
+}
