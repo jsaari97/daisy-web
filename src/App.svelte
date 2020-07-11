@@ -11,15 +11,16 @@
   let audioRef;
   let walker;
   let playing = false;
+  let cache = {};
 
   const loadDocument = async event => {
     try {
       const [file] = event.target.files;
 
-      const { dom, zip: zipObj } = await loadFile(file);
+      const result = await loadFile(file);
 
-      content = dom.parentElement.innerHTML;
-      zip = zipObj;
+      content = result.dom.parentElement.innerHTML;
+      zip = result.zip;
     } catch (error) {
       console.warn(error);
     }
@@ -28,6 +29,7 @@
   const stopPlayback = () => {
     walker.return();
     audioRef.pause();
+    cursor.style.background = "transparent";
   };
 
   const playAudio = (audio, element) =>
@@ -60,7 +62,7 @@
   const readDocument = async () => {
     walker = readContentDOM(cursor);
 
-    const getAudioUrl = getAudioSource(zip);
+    const getAudioUrl = getAudioSource(zip, cache);
 
     for (const element of walker) {
       console.log(element);

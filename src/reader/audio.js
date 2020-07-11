@@ -1,5 +1,6 @@
 import JSZip from "jszip";
 import xpath from "xpath";
+import { getCache, setCache } from "./cache";
 
 export const findPaths = (name, files) => {
   const re = new RegExp(`\/${name}\\.`, "g");
@@ -54,7 +55,7 @@ export const getPlaybackRange = (dom, id) => {
  * @param {JSZip} zip
  * @returns {(element: Element) => Promise<string | null>}
  */
-export const getAudioSource = (zip) => async (element) => {
+export const getAudioSource = (zip, cache) => async (element) => {
   try {
     const ref = element.getAttribute("smilref");
 
@@ -64,21 +65,23 @@ export const getAudioSource = (zip) => async (element) => {
 
     const [name, id] = ref.split("#").map((s) => s.split(".")[0]);
 
-    const [audioPath, docPath] = findPaths(name, zip.files);
+    let [audio, dom] = getCache(name, cache);
 
-    const audioBlob = await loadAudio(audioPath, zip);
+    if (!audio && !dom) {
+      const [audioPath, docPath] = findPaths(name, zip.files);
 
-    const dom = await loadDOM(docPath, zip);
+      audio = await loadAudio(audioPath, zip);
+
+      dom = await loadDOM(docPath, zip);
+
+      if (cache) {
+        setCache(name, [audio, dom], cache);
+      }
+    }
 
     const range = getPlaybackRange(dom, id);
 
-    if (!range) {
-      return null;
-    }
-
-    const audioUrl = `${audioBlob}#t=${range.join(",")}`;
-
-    return audioUrl;
+    return range ? `${audio}#t=${range.join(",")}` : null;
   } catch (error) {
     return Promise.reject(error);
   }
