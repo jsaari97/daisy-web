@@ -1,5 +1,7 @@
 <script>
   import Controls from "./components/controls/controls.svelte";
+  import FileInput from "./components/FileInput.svelte";
+
   import { loadFile } from "./reader/loader";
   import { readContentDOM, lookBackward, lookForward } from "./reader/reader";
   import { getAudioSource } from "./reader/audio";
@@ -144,22 +146,23 @@
   $: content, setTimeout(onDocumentLoad, 0);
 </script>
 
-<main>
+<style>
+  main {
+    min-height: 100vh;
+  }
+</style>
+
+<main data-typesettings>
   {#if !content}
-    <section class="file-input-section">
-      <input
-        on:change={loadDocument}
-        aria-label="File"
-        type="file"
-        name="file"
-        accept="application/zip" />
+    <FileInput on:change={loadDocument} />
+  {/if}
+  {#if content}
+    <section class="content">
+      <div id="content" bind:this={ref} on:click={onContentSelect}>
+        {@html content}
+      </div>
     </section>
   {/if}
-  <section class="content">
-    <div id="content" bind:this={ref} on:click={onContentSelect}>
-      {@html content}
-    </div>
-  </section>
   <audio bind:this={audioRef} />
   <Controls
     {playing}
