@@ -152,7 +152,7 @@
   }
 </style>
 
-<main data-typesettings>
+<main>
   {#if !content}
     <FileInput on:change={loadDocument} />
   {/if}
