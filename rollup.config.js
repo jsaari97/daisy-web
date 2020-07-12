@@ -4,6 +4,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import livereload from "rollup-plugin-livereload";
 import alias from "@rollup/plugin-alias";
 import { terser } from "rollup-plugin-terser";
+import svg from "rollup-plugin-svelte-svg";
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -29,6 +30,8 @@ export default {
     alias({
       entries: [{ find: "jszip", replacement: "jszip/dist/jszip.js" }],
     }),
+
+    svg({ dev: !production }),
 
     // If you have external dependencies installed from
     // npm, you'll most likely need these plugins. In

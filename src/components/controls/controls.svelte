@@ -1,5 +1,9 @@
 <script>
   import Button from "./button.svelte";
+  import PlayIcon from "../../svg/play.svg";
+  import PauseIcon from "../../svg/pause.svg";
+  import BackwardIcon from "../../svg/step-backward.svg";
+  import ForwardIcon from "../../svg/skip-forward.svg";
 
   export let playing = false;
   export let disabled;
@@ -29,12 +33,14 @@
 
 <section class="controls">
   <div class="controls__container">
-    <Button {disabled} on:click={onBackward}>Backward</Button>
+    <Button {disabled} icon={BackwardIcon} on:click={onBackward}>
+      Backward
+    </Button>
 
-    <Button {disabled} on:click={onPlayToggle}>
+    <Button {disabled} icon={playing ? PauseIcon : PlayIcon} on:click={onPlayToggle}>
       {playing ? 'Pause' : 'Play'}
     </Button>
 
-    <Button {disabled} on:click={onForward}>Forward</Button>
+    <Button {disabled} icon={ForwardIcon} on:click={onForward}>Forward</Button>
   </div>
 </section>
