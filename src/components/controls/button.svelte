@@ -11,9 +11,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0.5rem 0;
-    font-size: 0.725rem;
-    border-radius: 8px;
+    padding: 0.75rem 0;
+    font-size: 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e1e1e1;
+    background-color: #f9f9f9;
   }
 
   button:not(:last-of-type) {
