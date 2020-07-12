@@ -2,6 +2,11 @@ import JSZip from "jszip";
 import xpath from "xpath";
 import { parseXml, embedImages, transformList } from "./dom";
 
+/**
+ * 
+ * @param {object} files 
+ * @returns {string | null}
+ */
 export const findEntryFile = (files) => {
   return Object.keys(files).find((file) => file.match(/\.xml$/)) || null;
 };
@@ -18,6 +23,11 @@ const defaultMeta = {
   language: null,
 };
 
+/**
+ *
+ * @param {xpath.SelectedValue[]} metaList
+ * @returns {object}
+ */
 export const constructMeta = (metaList) => {
   return metaList.reduce((meta, item) => {
     const key = item.getAttribute("name").split(":")[1].toLowerCase();
@@ -31,8 +41,9 @@ export const constructMeta = (metaList) => {
 };
 
 /**
- * 
- * @param {File} file 
+ *
+ * @param {File} file
+ * @returns {Promise<{ dom: xpath.SelectedValue, meta: object, zip: JSZip }>}
  */
 export const loadFile = async (file) => {
   try {
