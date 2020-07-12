@@ -18,7 +18,7 @@
     width: 100%;
     padding: 0.5rem 0;
     bottom: 0;
-    background-color: rgba(255, 255, 255, 0.85);
+    background-color: rgba(255, 255, 255, 0.925);
     border-top: 1px solid #f1f1f1;
   }
 

@@ -5,14 +5,14 @@
 
 <style>
   button {
-    width: 6rem;
+    width: 5rem;
     border: 0;
     outline: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 0.75rem 0;
-    font-size: 0.75rem;
+    font-size: 0.725rem;
     border-radius: 0.5rem;
     border: 1px solid #e1e1e1;
     background-color: #f9f9f9;
@@ -24,9 +24,9 @@
 
   button > :global(svg) {
     fill: #424242;
-    height: 1.5rem;
-    width: 1.5rem;
-    margin-bottom: 0.5rem;
+    height: 1rem;
+    width: 1rem;
+    margin-bottom: 0.25rem;
   }
 
   button[disabled] > :global(svg) {

@@ -402,7 +402,7 @@ h4,
 h5,
 h6 {
   /* Change heading typefaces here */
-  font-family: sans-serif;
+  /*font-family: sans-serif;*/
   margin-top: 1.5rem;
   margin-bottom: 0;
   line-height: 1.5rem;
@@ -410,13 +410,13 @@ h6 {
 }
 
 h1 {
-  font-size: 4.242rem;
+  font-size: 4.25rem;
   line-height: 4.5rem;
   margin-top: 3rem;
 }
 
 h2 {
-  font-size: 2.828rem;
+  font-size: 2.75rem;
   line-height: 3rem;
   margin-top: 3rem;
 }
