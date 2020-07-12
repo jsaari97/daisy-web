@@ -72,6 +72,19 @@
 
       if (audioUrl) {
         cursor = element;
+
+        if (element.offsetHeight) {
+          if (
+            element.offsetHeight + element.offsetTop >
+            window.pageYOffset + window.innerHeight - 128
+          ) {
+            window.scrollTo({
+              top: element.offsetTop - 64,
+              behavior: "smooth"
+            });
+          }
+        }
+
         await playAudio(audioUrl, element);
       }
     }
