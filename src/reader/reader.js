@@ -35,24 +35,36 @@ export function* readContentDOM(from) {
  * @param {Element} element
  * @param {Boolean} visited
  */
-export function lookBackward(element, visited = element.attributes["smilref"]) {
+export function lookBackward(element, previous = element) {
   if (!element) {
     return null;
   }
 
-  if (!visited && element.attributes["smilref"] && !element.lastElementChild) {
+  const initial = element === previous;
+  const upwards = element.firstElementChild === previous;
+  const hasSibling = !!element.previousElementSibling;
+  const hasChild = !!element.lastElementChild;
+
+  if (
+    !initial &&
+    element.attributes["smilref"] &&
+    !element.getAttribute("smilref").includes("#tcs") &&
+    (upwards || !hasChild)
+  ) {
     return element;
   }
 
-  let next;
+  let next = element.parentElement;
 
-  if (!visited && element.lastElementChild) {
-    next = element.lastElementChild;
-  } else {
-    next = element.previousElementSibling || element.parentElement;
+  if ((initial || upwards || hasSibling) && element.previousElementSibling) {
+    next = element.previousElementSibling;
   }
 
-  return lookBackward(next, next === element.parentElement);
+  if (!upwards && hasChild && !initial) {
+    next = element.lastElementChild;
+  }
+
+  return lookBackward(next, element);
 }
 
 /**
