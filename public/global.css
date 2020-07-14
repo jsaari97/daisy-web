@@ -413,7 +413,7 @@ h6 {
 h1 {
   font-size: 4.25rem;
   line-height: 4.5rem;
-  margin-top: 3rem;
+  margin: 3rem 0;
 }
 
 h2 {
@@ -517,6 +517,5 @@ button {
   h1 {
     font-size: 3rem;
     line-height: 1.25;
-    margin-bottom: 3rem;
   }
 }
