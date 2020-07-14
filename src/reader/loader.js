@@ -20,6 +20,10 @@ export const findEntryFile = (files) => {
  */
 export const loadFile = async (file) => {
   try {
+    if (!file.name.match(/\.zip$/)) {
+      return Promise.reject("File must be in .zip format.");
+    }
+
     const zip = await JSZip.loadAsync(file);
 
     const [valid, message] = isFileValid(zip.files);
