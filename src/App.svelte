@@ -75,7 +75,6 @@
     const getAudioUrl = getAudioSource(zip, cache);
 
     for (const element of walker) {
-      console.log(element);
       const audioUrl = await getAudioUrl(element);
 
       if (audioUrl) {
