@@ -5,6 +5,7 @@
   import { loadFile } from "./reader/loader";
   import { readContentDOM, lookBackward, lookForward } from "./reader/reader";
   import { getAudioSource } from "./reader/audio";
+  import { autoscroll } from "./utils/autoscroll";
 
   let content = "";
   let zip;
@@ -74,15 +75,7 @@
         cursor = element;
 
         if (element.offsetHeight) {
-          if (
-            element.offsetHeight + element.offsetTop >
-            window.pageYOffset + window.innerHeight - 128
-          ) {
-            window.scrollTo({
-              top: element.offsetTop - 64,
-              behavior: "smooth"
-            });
-          }
+          autoscroll(element);
         }
 
         await playAudio(audioUrl, element);
