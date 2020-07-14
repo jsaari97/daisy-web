@@ -32,18 +32,24 @@
   const stopPlayback = () => {
     walker.return();
     audioRef.pause();
-    cursor.style.background = "transparent";
+    cursor.classList.remove("active");
   };
 
-  const playAudio = (audio, element) =>
-    new Promise(async resolve => {
+  /**
+   *
+   * @param {string} audio
+   * @param {Element} element
+   * @returns {Promise<void>}
+   */
+  function playAudio(audio, element) {
+    return new Promise(async resolve => {
       try {
         audioRef.src = audio;
 
         const onCompleted = () => {
           audioRef.pause();
           audioRef.removeEventListener("pause", onCompleted);
-          element.style.background = "transparent";
+          element.classList.remove("active");
 
           return resolve();
         };
@@ -51,7 +57,7 @@
         const onStart = async () => {
           audioRef.addEventListener("pause", onCompleted);
           audioRef.removeEventListener("canplaythrough", onStart);
-          element.style.background = "yellow";
+          element.classList.add("active");
 
           audioRef.play();
         };
@@ -61,6 +67,7 @@
         return Promise.reject(error);
       }
     });
+  }
 
   const readDocument = async () => {
     walker = readContentDOM(cursor);
