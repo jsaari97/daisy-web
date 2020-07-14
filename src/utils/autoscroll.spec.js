@@ -50,7 +50,7 @@ describe("Auto Scroll", () => {
     autoscroll(element);
 
     expect(callback).toHaveBeenCalledTimes(1);
-    expect(callback).toHaveBeenLastCalledWith({ top: 425 - OFFSET, behavior: "smooth" });
+    expect(callback).toHaveBeenLastCalledWith({ top: 425 - OFFSET * 2, behavior: "smooth" });
   });
 
   it("should scroll up", () => {
@@ -60,6 +60,6 @@ describe("Auto Scroll", () => {
     autoscroll(element);
 
     expect(callback).toHaveBeenCalledTimes(1);
-    expect(callback).toHaveBeenLastCalledWith({ top: 600 + OFFSET * 3, behavior: "smooth" });
+    expect(callback).toHaveBeenLastCalledWith({ top: 600 + OFFSET * 4, behavior: "smooth" });
   });
 });

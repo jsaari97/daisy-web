@@ -10,7 +10,7 @@ export function autoscroll(element) {
 
   if (height + y > window.innerHeight - OFFSET * 3) {
     window.scrollTo({
-      top: window.pageYOffset + y - OFFSET,
+      top: window.pageYOffset + y - OFFSET * 2,
       behavior: "smooth",
     });
   } else if (y < OFFSET) {
@@ -18,7 +18,7 @@ export function autoscroll(element) {
     const h = window.innerHeight - i;
 
     window.scrollTo({
-      top: Math.max(0, window.pageYOffset - h + OFFSET * 3),
+      top: Math.max(0, window.pageYOffset - h + OFFSET * 4),
       behavior: "smooth",
     });
   }
