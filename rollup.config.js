@@ -32,10 +32,9 @@ export default {
       entries: [{ find: "jszip", replacement: "jszip/dist/jszip.js" }],
     }),
 
-    !production &&
-      replace({
-        __dev__: true,
-      }),
+    replace({
+      __dev__: !production,
+    }),
 
     svg({ dev: !production }),
 
