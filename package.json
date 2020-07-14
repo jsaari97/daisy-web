@@ -2,6 +2,7 @@
   "name": "daisy-web",
   "description": "Web-based DAISY e-book format reader",
   "author": "Jim Saari @jsaari97",
+  "repository": "jsaari97/daisy-web",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
