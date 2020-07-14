@@ -1,5 +1,15 @@
 <script>
   let dragging = false;
+
+  function handleDragging() {
+    if (!dragging) {
+      dragging = true;
+    }
+  }
+
+  function handleDragEnd() {
+    dragging = false;
+  }
 </script>
 
 <style>
@@ -24,7 +34,8 @@
   }
 
   .file-input__container.dragging {
-    background-color: #0be881;
+    background-color: #e9e9e9;
+    border-color: #f1f1f1;
   }
 
   input {
@@ -45,12 +56,10 @@
   <div
     class="file-input__container"
     class:dragging
-    on:dragenter={() => {
-      dragging = true;
-    }}
-    on:dragleave={() => {
-      dragging = false;
-    }}>
+    on:dragover={handleDragging}
+    on:dragleave={handleDragEnd}
+    on:drop={handleDragEnd}
+    >
     <input
       on:change
       aria-label="File"
