@@ -491,9 +491,20 @@ pagenum {
 
 figure {
   margin: 1.5rem;
+  text-align: center;
 }
 
 img {
   width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
   height: auto;
+  border-radius: 0.5rem;
+}
+
+button {
+  border: 0;
+  outline: 0;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1.5rem;
 }

@@ -14,11 +14,16 @@
   let audioRef;
   let walker;
   let playing = false;
+  let loading = false;
   let cache = {};
 
   const loadDocument = async event => {
     try {
       const [file] = event.target.files;
+
+      if (!file.name.match(/\.zip$/)) {
+        return Promise.reject("File must be in .zip format.");
+      }
 
       const result = await loadFile(file);
 
@@ -105,6 +110,29 @@
     }
   };
 
+  async function loadExample() {
+    try {
+      loading = true;
+      const res = await fetch(
+        "https://cors-anywhere.herokuapp.com/https://dl.daisy.org/samples/3full-text-full-audio/are-you-ready-z3986.zip",
+        {
+          method: "GET",
+          mode: "cors"
+        }
+      );
+      const data = await res.blob();
+
+      const result = await loadFile(data);
+
+      content = result.dom.parentElement.innerHTML;
+      zip = result.zip;
+    } catch (error) {
+      console.warn(error);
+    } finally {
+      loading = false;
+    }
+  }
+
   const togglePlay = () => {
     if (playing) {
       stopPlayback();
@@ -166,7 +194,10 @@
 
 <main>
   {#if !content}
-    <FileInput on:change={loadDocument} />
+    <FileInput
+      on:change={loadDocument}
+      on:click={loadExample}
+      disabled={loading} />
   {/if}
   {#if content}
     <section class="content">

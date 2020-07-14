@@ -28,6 +28,7 @@
     margin: 0 auto;
     display: flex;
     justify-content: center;
+    align-items: flex-end;
   }
 </style>
 
@@ -38,6 +39,7 @@
     </Button>
 
     <Button
+      primary
       {disabled}
       icon={playing ? PauseIcon : PlayIcon}
       on:click={onPlayToggle}>

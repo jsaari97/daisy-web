@@ -1,40 +1,61 @@
 <script>
   export let disabled = false;
   export let icon = null;
+  export let primary = false;
 </script>
 
 <style>
   button {
-    width: 5rem;
-    border: 0;
-    outline: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0.75rem 0;
     font-size: 0.725rem;
-    border-radius: 0.5rem;
-    border: 1px solid #e1e1e1;
-    background-color: #f9f9f9;
+    background: transparent;
+    padding: 0 0.75rem;
   }
 
-  button:not(:last-of-type) {
-    margin-right: 1rem;
+  button > div {
+    height: 2.5rem;
+    width: 2.5rem;
+    border: 2px solid #3c40c6;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.375rem;
   }
 
-  button > :global(svg) {
-    fill: #424242;
-    height: 1rem;
-    width: 1rem;
-    margin-bottom: 0.25rem;
+  button :global(svg) {
+    fill: #3c40c6;
+    height: 1.25rem;
+    width: 1.25rem;
   }
 
-  button[disabled] > :global(svg) {
-    fill: #aaa;
+  button.primary > div {
+    height: 3.25rem;
+    width: 3.25rem;
+    background: #3c40c6;
+  }
+
+  button.primary :global(svg) {
+    fill: #fff;
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+
+  button[disabled] {
+    opacity: 0.5;
   }
 </style>
 
-<button {disabled} aria-disabled={disabled} on:click type="button">
-  <svelte:component this={icon} />
+<button
+  class:primary
+  {disabled}
+  aria-disabled={disabled}
+  on:click
+  type="button">
+  <div aria-hidden="true">
+    <svelte:component this={icon} />
+  </div>
   <slot />
 </button>

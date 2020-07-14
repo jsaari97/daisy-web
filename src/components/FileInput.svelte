@@ -1,4 +1,6 @@
 <script>
+  export let disabled = false;
+
   let dragging = false;
 
   function handleDragging() {
@@ -13,19 +15,21 @@
 </script>
 
 <style>
-  .file-input__section {
+  section {
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
-  .file-input__container {
+  .container {
     width: calc(100% - 2rem);
     height: 8rem;
     border: 1px solid #e1e1e1;
     max-width: 24rem;
     border-radius: 0.5rem;
     background-color: #f9f9f9;
-    margin: auto;
     position: relative;
     display: flex;
     align-items: center;
@@ -33,7 +37,7 @@
     box-shadow: 0 22px 16px -16px rgba(0, 0, 0, 0.05);
   }
 
-  .file-input__container.dragging {
+  .container.dragging {
     background-color: #e9e9e9;
     border-color: #f1f1f1;
   }
@@ -50,17 +54,31 @@
   label {
     display: block;
   }
+
+  .separator {
+    margin-top: 1.5rem;
+    font-style: italic;
+    color: #727272;
+  }
+
+  .example-btn {
+    background-color: #3c40c6;
+    color: #fff;
+    margin-top: 1.5rem;
+    font-size: 0.825rem;
+    font-weight: bolder;
+  }
 </style>
 
-<section class="file-input__section">
+<section>
   <div
-    class="file-input__container"
+    class="container"
     class:dragging
     on:dragover={handleDragging}
     on:dragleave={handleDragEnd}
-    on:drop={handleDragEnd}
-    >
+    on:drop={handleDragEnd}>
     <input
+      {disabled}
       on:change
       aria-label="File"
       type="file"
@@ -72,4 +90,8 @@
       or drag it here
     </label>
   </div>
+  <span aria-hidden="true" class="separator">or</span>
+  <button {disabled} type="button" on:click class="example-btn">
+    Load Example
+  </button>
 </section>
