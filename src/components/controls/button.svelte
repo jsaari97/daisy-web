@@ -2,27 +2,22 @@
   export let disabled = false;
   export let icon = null;
   export let primary = false;
+  export let label = "";
 </script>
 
 <style>
   button {
     display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: center;
     font-size: 0.725rem;
     background: transparent;
-    padding: 0 0.75rem;
-  }
-
-  button > div {
+    margin: 0 0.75rem;
+    padding: 0;
     height: 2.5rem;
     width: 2.5rem;
     border: 2px solid #3c40c6;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 0.375rem;
   }
 
   button :global(svg) {
@@ -31,7 +26,7 @@
     width: 1.25rem;
   }
 
-  button.primary > div {
+  button.primary {
     height: 3.25rem;
     width: 3.25rem;
     background: #3c40c6;
@@ -53,9 +48,7 @@
   {disabled}
   aria-disabled={disabled}
   on:click
+  aria-label={label}
   type="button">
-  <div aria-hidden="true">
-    <svelte:component this={icon} />
-  </div>
-  <slot />
+  <svelte:component this={icon} aria-hidden="true" />
 </button>

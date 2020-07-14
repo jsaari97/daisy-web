@@ -16,7 +16,7 @@
   .controls {
     position: fixed;
     width: 100%;
-    padding: 0.5rem 0;
+    padding: 0.625rem 0;
     bottom: 0;
     background-color: rgba(255, 255, 255, 0.925);
     border-top: 1px solid #f1f1f1;
@@ -28,24 +28,29 @@
     margin: 0 auto;
     display: flex;
     justify-content: center;
-    align-items: flex-end;
+    align-items: center;
   }
 </style>
 
 <section class="controls">
   <div class="controls__container">
-    <Button {disabled} icon={BackwardIcon} on:click={onBackward}>
-      Backward
-    </Button>
+    <Button
+      label="Backward"
+      {disabled}
+      icon={BackwardIcon}
+      on:click={onBackward} />
 
     <Button
       primary
       {disabled}
+      label={playing ? 'Pause' : 'Play'}
       icon={playing ? PauseIcon : PlayIcon}
-      on:click={onPlayToggle}>
-      {playing ? 'Pause' : 'Play'}
-    </Button>
+      on:click={onPlayToggle} />
 
-    <Button {disabled} icon={ForwardIcon} on:click={onForward}>Forward</Button>
+    <Button
+      {disabled}
+      icon={ForwardIcon}
+      on:click={onForward}
+      label="Forward" />
   </div>
 </section>
