@@ -1,6 +1,7 @@
 {
   "name": "daisy-web",
   "description": "Web-based DAISY e-book format reader",
+  "homepage": "https://jsaari97.github.io/daisy-web",
   "author": "Jim Saari @jsaari97",
   "repository": "jsaari97/daisy-web",
   "version": "0.0.0",
@@ -10,7 +11,9 @@
     "dev": "rollup -c -w",
     "start": "sirv public",
     "test": "jest",
-    "svg": "svgo -r -f src/svg --disable=removeViewBox"
+    "svg": "svgo -r -f src/svg --disable=removeViewBox",
+    "predeploy": "rm -rf build && yarn build && cp -R public/ build && replace '=\"/' '=\"/daisy-web/' build -r --exclude=\"*.js,*.svg\" && replace ' \"/' ' \"/daisy-web/' build -r --exclude=\"*.js,*.svg\" && replace '\"/service-worker.js\"' '\"/daisy-web/service-worker.js\"' build/build/bundle.js && replace '\"/' ' \"/daisy-web/' build/service-worker.js",
+    "deploy": "gh-pages -d build"
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",
@@ -19,7 +22,9 @@
     "@rollup/plugin-commonjs": "^14.0.0",
     "@rollup/plugin-node-resolve": "^8.0.0",
     "babel-jest": "^26.1.0",
+    "gh-pages": "^3.1.0",
     "jest": "^26.1.0",
+    "replace": "^1.2.0",
     "rollup": "^2.3.4",
     "rollup-plugin-livereload": "^1.0.0",
     "rollup-plugin-svelte": "^5.0.3",
