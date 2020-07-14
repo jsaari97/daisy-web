@@ -24,7 +24,7 @@
   }
 
   .file-input__container.dragging {
-    background-color: gold;
+    background-color: #0be881;
   }
 
   input {
