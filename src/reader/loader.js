@@ -1,10 +1,11 @@
 import JSZip from "jszip";
 import xpath from "xpath";
 import { parseXml, embedImages, transformList } from "./dom";
+import { isFileValid } from "./validate";
 
 /**
- * 
- * @param {object} files 
+ *
+ * @param {object} files
  * @returns {string | null}
  */
 export const findEntryFile = (files) => {
@@ -49,6 +50,11 @@ export const loadFile = async (file) => {
   try {
     const zip = await JSZip.loadAsync(file);
 
+    const [valid, message] = isFileValid(zip.files);
+    if (!valid) {
+      return Promise.reject(message || "File validation failed.");
+    }
+
     const name = findEntryFile(zip.files);
 
     const entryXml = await zip.file(name).async("string");
@@ -73,6 +79,6 @@ export const loadFile = async (file) => {
       zip,
     };
   } catch (error) {
-    console.warn(error);
+    return Promise.reject(error);
   }
 };
