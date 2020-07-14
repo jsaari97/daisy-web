@@ -21,7 +21,15 @@
 
   onMount(() => {
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/service-worker.js");
+      if (__dev__) {
+        navigator.serviceWorker.getRegistrations().then(regs => {
+          if (regs.length) {
+            regs.forEach(reg => reg.unregister());
+          }
+        });
+      } else {
+        navigator.serviceWorker.register("/service-worker.js");
+      }
     }
   });
 

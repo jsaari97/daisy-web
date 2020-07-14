@@ -3,6 +3,7 @@ import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import livereload from "rollup-plugin-livereload";
 import alias from "@rollup/plugin-alias";
+import replace from "@rollup/plugin-replace";
 import { terser } from "rollup-plugin-terser";
 import svg from "rollup-plugin-svelte-svg";
 
@@ -30,6 +31,11 @@ export default {
     alias({
       entries: [{ find: "jszip", replacement: "jszip/dist/jszip.js" }],
     }),
+
+    !production &&
+      replace({
+        __dev__: true,
+      }),
 
     svg({ dev: !production }),
 
