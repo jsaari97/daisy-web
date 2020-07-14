@@ -1,6 +1,7 @@
 <script>
   import Controls from "./components/controls/controls.svelte";
   import FileInput from "./components/FileInput.svelte";
+  import Loading from "./components/Loading.svelte";
 
   import { loadFile } from "./reader/loader";
   import { readContentDOM, lookBackward, lookForward } from "./reader/reader";
@@ -25,12 +26,16 @@
         return Promise.reject("File must be in .zip format.");
       }
 
+      loading = true;
+
       const result = await loadFile(file);
 
       content = result.dom.parentElement.innerHTML;
       zip = result.zip;
     } catch (error) {
       console.warn(error);
+    } finally {
+      loading = false;
     }
   };
 
@@ -213,4 +218,7 @@
     onPlayToggle={togglePlay}
     onBackward={handlePrevious}
     onForward={handleForward} />
+  {#if loading}
+    <Loading />
+  {/if}
 </main>

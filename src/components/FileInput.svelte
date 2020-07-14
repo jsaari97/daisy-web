@@ -42,6 +42,10 @@
     border-color: #f1f1f1;
   }
 
+  .container.disabled {
+    opacity: 0.5;
+  }
+
   input {
     position: absolute;
     top: 0;
@@ -61,12 +65,16 @@
     color: #727272;
   }
 
-  .example-btn {
+  button {
     background-color: #3c40c6;
     color: #fff;
     margin-top: 1.5rem;
     font-size: 0.825rem;
     font-weight: bolder;
+  }
+
+  button[disabled] {
+    opacity: 0.5;
   }
 </style>
 
@@ -74,6 +82,7 @@
   <div
     class="container"
     class:dragging
+    class:disabled
     on:dragover={handleDragging}
     on:dragleave={handleDragEnd}
     on:drop={handleDragEnd}>
@@ -91,7 +100,5 @@
     </label>
   </div>
   <span aria-hidden="true" class="separator">or</span>
-  <button {disabled} type="button" on:click class="example-btn">
-    Load Example
-  </button>
+  <button {disabled} type="button" on:click>Load Example</button>
 </section>
