@@ -1,0 +1,21 @@
+{
+  "name": "Daisy Web - E-book Reader",
+  "short_name": "Daisy Web",
+  "theme_color": "#3c40c6",
+  "background_color": "#fff",
+  "display": "standalone",
+  "start_url": "/daisy-web/index.html",
+  "icons": [
+    {
+      "src": "/daisy-web/assets/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/daisy-web/assets/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "splash_pages": null
+}
