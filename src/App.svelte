@@ -3,6 +3,7 @@
   import FileInput from "./components/FileInput.svelte";
   import Loading from "./components/Loading.svelte";
 
+  import { onMount } from "svelte";
   import { loadFile } from "./reader/loader";
   import { readContentDOM, lookBackward, lookForward } from "./reader/reader";
   import { getAudioSource } from "./reader/audio";
@@ -17,6 +18,12 @@
   let playing = false;
   let loading = false;
   let cache = {};
+
+  onMount(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/service-worker.js");
+    }
+  });
 
   const loadDocument = async event => {
     try {
