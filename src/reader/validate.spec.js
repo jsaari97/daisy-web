@@ -1,4 +1,4 @@
-const { isFileValid } = require("./validate");
+import { isFileValid } from "./validate";
 
 /**
  *
