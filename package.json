@@ -13,7 +13,8 @@
     "test": "jest",
     "svg": "svgo -r -f src/svg --disable=removeViewBox",
     "predeploy": "rm -rf build && yarn build && cp -R public/ build && replace '=\"/' '=\"/daisy-web/' build -r --exclude=\"*.js,*.svg\" && replace ' \"/' ' \"/daisy-web/' build -r --exclude=\"*.js,*.svg\" && replace '\"/service-worker.js\"' '\"/daisy-web/service-worker.js\"' build/build/bundle.js && replace '\"/' ' \"/daisy-web/' build/service-worker.js",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "version": "node version.js"
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",
