@@ -19,14 +19,14 @@
   let loading = false;
   let cache = {};
 
-  onMount(() => {
+  onMount(async () => {
     if ("serviceWorker" in navigator) {
       if (__dev__) {
-        navigator.serviceWorker.getRegistrations().then(regs => {
-          if (regs.length) {
-            regs.forEach(reg => reg.unregister());
-          }
-        });
+        const regs = await navigator.serviceWorker.getRegistrations();
+
+        if (regs.length) {
+          regs.forEach(reg => reg.unregister());
+        }
       } else {
         navigator.serviceWorker.register("/service-worker.js");
       }
