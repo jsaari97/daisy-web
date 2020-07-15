@@ -4,7 +4,7 @@
   "homepage": "https://jsaari97.github.io/daisy-web",
   "author": "Jim Saari @jsaari97",
   "repository": "jsaari97/daisy-web",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "scripts": {
     "build": "rollup -c",
