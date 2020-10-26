@@ -1,4 +1,4 @@
-var cacheName = "daisyweb-cache-" + "v0.1.1";
+var cacheName = "daisyweb-cache-" + "v0.1.2";
 var filesToCache = [
   "/",
   "/index.html",
