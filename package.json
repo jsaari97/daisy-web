@@ -38,6 +38,6 @@
   },
   "dependencies": {
     "jszip": "^3.5.0",
-    "xpath": "^0.0.29"
+    "xpath": "^0.0.32"
   }
 }
