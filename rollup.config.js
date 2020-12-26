@@ -6,6 +6,7 @@ import alias from "@rollup/plugin-alias";
 import replace from "@rollup/plugin-replace";
 import { terser } from "rollup-plugin-terser";
 import svg from "rollup-plugin-svelte-svg";
+import css from "rollup-plugin-css-only";
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -19,14 +20,12 @@ export default {
   },
   plugins: [
     svelte({
-      // enable run-time checks when not in production
-      dev: !production,
-      // we'll extract any component CSS out into
-      // a separate file - better for performance
-      css: (css) => {
-        css.write("bundle.css");
+      compilerOptions: {
+        dev: !production,
       },
     }),
+
+    css({ output: "bundle.css" }),
 
     alias({
       entries: [{ find: "jszip", replacement: "jszip/dist/jszip.js" }],
