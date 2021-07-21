@@ -5,7 +5,7 @@ import livereload from "rollup-plugin-livereload";
 import alias from "@rollup/plugin-alias";
 import replace from "@rollup/plugin-replace";
 import { terser } from "rollup-plugin-terser";
-import svg from "rollup-plugin-svelte-svg";
+import { svelteSVG } from "rollup-plugin-svelte-svg";
 import css from "rollup-plugin-css-only";
 
 const production = !process.env.ROLLUP_WATCH;
@@ -19,6 +19,7 @@ export default {
     file: "public/build/bundle.js",
   },
   plugins: [
+    svelteSVG(),
     svelte({
       compilerOptions: {
         dev: !production,
@@ -34,8 +35,6 @@ export default {
     replace({
       __dev__: !production,
     }),
-
-    svg({ dev: !production }),
 
     // If you have external dependencies installed from
     // npm, you'll most likely need these plugins. In
