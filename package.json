@@ -6,40 +6,35 @@
   "repository": "jsaari97/daisy-web",
   "version": "0.1.3",
   "license": "MIT",
+  "engines": {
+    "node": ">=24.0.0",
+    "npm": ">=11.0.0"
+  },
   "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -c -w",
-    "start": "sirv public",
+    "build": "vite build",
+    "dev": "vite",
+    "start": "vite preview",
+    "preview": "vite preview",
     "test": "jest",
     "svg": "svgo -r -f src/svg",
     "sample:fetch": "node scripts/fetch-sample-zip.js",
-    "predeploy": "rm -rf build && npm run build && npm run sample:fetch && cp -R public/ build && replace '=\"/' '=\"/daisy-web/' build -r --exclude=\"*.js,*.svg\" && replace ' \"/' ' \"/daisy-web/' build -r --exclude=\"*.js,*.svg\" && replace '\"/service-worker.js\"' '\"/daisy-web/service-worker.js\"' build/build/bundle.js && replace '\"/' ' \"/daisy-web/' build/service-worker.js",
-    "deploy": "gh-pages -d build",
-    "version": "node version.js"
+    "predeploy": "npm run sample:fetch && npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.4",
-    "@babel/preset-env": "^7.10.4",
-    "@rollup/plugin-alias": "^3.1.1",
-    "@rollup/plugin-commonjs": "^19.0.1",
-    "@rollup/plugin-node-resolve": "^13.0.2",
-    "@rollup/plugin-replace": "^3.0.0",
-    "babel-jest": "^27.0.0",
+    "@babel/core": "^7.29.0",
+    "@babel/preset-env": "^7.29.2",
+    "@sveltejs/vite-plugin-svelte": "^7.0.0",
+    "babel-jest": "^30.3.0",
     "gh-pages": "^6.3.0",
-    "jest": "^27.0.0",
-    "replace": "^1.2.0",
-    "rollup": "^2.3.4",
-    "rollup-plugin-css-only": "^3.1.0",
-    "rollup-plugin-livereload": "^2.0.0",
-    "rollup-plugin-svelte": "^7.0.0",
-    "rollup-plugin-svelte-svg": "^1.0.0-beta.2",
-    "rollup-plugin-terser": "^7.0.0",
-    "sirv-cli": "^1.0.3",
-    "svelte": "^3.0.0",
-    "svgo": "^4.0.1"
+    "jest": "^30.3.0",
+    "jest-environment-jsdom": "^30.3.0",
+    "svelte": "^5.54.0",
+    "svgo": "^4.0.1",
+    "vite": "^8.0.0"
   },
   "dependencies": {
-    "jszip": "^3.5.0",
-    "xpath": "^0.0.32"
+    "jszip": "^3.10.1",
+    "xpath": "^0.0.34"
   }
 }
