@@ -25,7 +25,7 @@
         const regs = await navigator.serviceWorker.getRegistrations();
 
         if (regs.length) {
-          regs.forEach(reg => reg.unregister());
+          regs.forEach((reg) => reg.unregister());
         }
       } else {
         navigator.serviceWorker.register("/service-worker.js");
@@ -33,7 +33,7 @@
     }
   });
 
-  const loadDocument = async event => {
+  const loadDocument = async (event) => {
     try {
       const [file] = event.target.files;
 
@@ -67,7 +67,7 @@
    * @returns {Promise<void>}
    */
   function playAudio(audio, element) {
-    return new Promise(async resolve => {
+    return new Promise(async (resolve) => {
       try {
         audioRef.src = audio;
 
@@ -114,7 +114,7 @@
     }
   };
 
-  const onContentSelect = event => {
+  const onContentSelect = (event) => {
     if (playing) {
       stopPlayback();
     }
@@ -133,13 +133,12 @@
   async function loadExample() {
     try {
       loading = true;
-      const res = await fetch(
-        "https://cors-anywhere.herokuapp.com/https://dl.daisy.org/samples/3full-text-full-audio/are-you-ready-z3986.zip",
-        {
-          method: "GET",
-          mode: "cors"
-        }
-      );
+      const res = await fetch("./samples/are-you-ready-z3986.zip");
+
+      if (!res.ok) {
+        throw new Error(`Failed to load sample file: ${res.status}`);
+      }
+
       const data = await res.blob();
 
       const result = await loadFile(data);
@@ -163,7 +162,7 @@
     playing = !playing;
   };
 
-  const controlHandler = handler => () => {
+  const controlHandler = (handler) => () => {
     const element = handler(cursor);
 
     if (element) {
@@ -182,7 +181,7 @@
   const handleForward = controlHandler(lookForward);
 
   // Keyboard events
-  window.addEventListener("keydown", event => {
+  window.addEventListener("keydown", (event) => {
     if (content) {
       switch (event.code) {
         case "ArrowLeft":
@@ -206,18 +205,13 @@
   $: content, setTimeout(onDocumentLoad, 0);
 </script>
 
-<style>
-  main {
-    min-height: 100vh;
-  }
-</style>
-
 <main>
   {#if !content}
     <FileInput
       on:change={loadDocument}
       on:click={loadExample}
-      disabled={loading} />
+      disabled={loading}
+    />
   {/if}
   {#if content}
     <section class="content">
@@ -232,8 +226,15 @@
     disabled={!content}
     onPlayToggle={togglePlay}
     onBackward={handlePrevious}
-    onForward={handleForward} />
+    onForward={handleForward}
+  />
   {#if loading}
     <Loading />
   {/if}
 </main>
+
+<style>
+  main {
+    min-height: 100vh;
+  }
+</style>
