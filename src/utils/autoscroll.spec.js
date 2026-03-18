@@ -21,13 +21,19 @@ function mockElement({ height, offset }) {
 function mockDOM({ offset, height }) {
   const scrollTo = jest.fn();
 
-  Object.defineProperty(global, "window", {
-    value: {
-      pageYOffset: offset,
-      innerHeight: height,
-      scrollTo,
-    },
-    writable: true,
+  Object.defineProperty(window, "pageYOffset", {
+    value: offset,
+    configurable: true,
+  });
+
+  Object.defineProperty(window, "innerHeight", {
+    value: height,
+    configurable: true,
+  });
+
+  Object.defineProperty(window, "scrollTo", {
+    value: scrollTo,
+    configurable: true,
   });
 
   return scrollTo;
