@@ -1,13 +1,15 @@
 <script>
-  import Controls from "./components/controls/controls.svelte";
+  import { onMount } from "svelte";
+
   import FileInput from "./components/FileInput.svelte";
   import Loading from "./components/Loading.svelte";
-
-  import { onMount } from "svelte";
+  import Controls from "./components/controls/controls.svelte";
+  import { getAudioSource } from "./reader/audio";
   import { loadFile } from "./reader/loader";
   import { readContentDOM, lookBackward, lookForward } from "./reader/reader";
-  import { getAudioSource } from "./reader/audio";
   import { autoscroll } from "./utils/autoscroll";
+
+  const baseUrl = import.meta.env.BASE_URL;
 
   let content = "";
   let zip;
@@ -20,17 +22,18 @@
   let cache = {};
 
   onMount(async () => {
-    if ("serviceWorker" in navigator) {
-      if (__dev__) {
-        const regs = await navigator.serviceWorker.getRegistrations();
-
-        if (regs.length) {
-          regs.forEach((reg) => reg.unregister());
-        }
-      } else {
-        navigator.serviceWorker.register("/service-worker.js");
-      }
+    if (!("serviceWorker" in navigator)) {
+      return;
     }
+
+    if (import.meta.env.DEV) {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+
+      registrations.forEach((registration) => registration.unregister());
+      return;
+    }
+
+    navigator.serviceWorker.register(`${baseUrl}service-worker.js`);
   });
 
   const loadDocument = async (event) => {
@@ -55,17 +58,17 @@
   };
 
   const stopPlayback = () => {
-    walker.return();
+    if (walker) {
+      walker.return();
+    }
+
     audioRef.pause();
-    cursor.classList.remove("active");
+
+    if (cursor?.classList) {
+      cursor.classList.remove("active");
+    }
   };
 
-  /**
-   *
-   * @param {string} audio
-   * @param {Element} element
-   * @returns {Promise<void>}
-   */
   function playAudio(audio, element) {
     return new Promise(async (resolve) => {
       try {
@@ -124,6 +127,13 @@
     readDocument();
   };
 
+  const onContentKeyDown = (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onContentSelect(event);
+    }
+  };
+
   const onDocumentLoad = () => {
     if (ref && ref.children.length) {
       cursor = ref;
@@ -133,14 +143,13 @@
   async function loadExample() {
     try {
       loading = true;
-      const res = await fetch("./samples/are-you-ready-z3986.zip");
+      const response = await fetch(`${baseUrl}samples/are-you-ready-z3986.zip`);
 
-      if (!res.ok) {
-        throw new Error(`Failed to load sample file: ${res.status}`);
+      if (!response.ok) {
+        throw new Error(`Failed to load sample file: ${response.status}`);
       }
 
-      const data = await res.blob();
-
+      const data = await response.blob();
       const result = await loadFile(data);
 
       content = result.dom.parentElement.innerHTML;
@@ -177,33 +186,35 @@
   };
 
   const handlePrevious = controlHandler(lookBackward);
-
   const handleForward = controlHandler(lookForward);
 
-  // Keyboard events
-  window.addEventListener("keydown", (event) => {
-    if (content) {
-      switch (event.code) {
-        case "ArrowLeft":
-          event.preventDefault();
-          handlePrevious();
-          return;
-        case "ArrowRight":
-          event.preventDefault();
-          handleForward();
-          return;
-        case "Space":
-          event.preventDefault();
-          togglePlay();
-          return;
-        default:
-          return;
-      }
+  const onKeyDown = (event) => {
+    if (!content) {
+      return;
     }
-  });
+
+    switch (event.code) {
+      case "ArrowLeft":
+        event.preventDefault();
+        handlePrevious();
+        return;
+      case "ArrowRight":
+        event.preventDefault();
+        handleForward();
+        return;
+      case "Space":
+        event.preventDefault();
+        togglePlay();
+        return;
+      default:
+        return;
+    }
+  };
 
   $: content, setTimeout(onDocumentLoad, 0);
 </script>
+
+<svelte:window on:keydown={onKeyDown} />
 
 <main>
   {#if !content}
@@ -215,12 +226,18 @@
   {/if}
   {#if content}
     <section class="content">
-      <div id="content" bind:this={ref} on:click={onContentSelect}>
+      <div
+        id="content"
+        bind:this={ref}
+        on:click={onContentSelect}
+        on:keydown={onContentKeyDown}
+        role="button"
+        tabindex="0">
         {@html content}
       </div>
     </section>
   {/if}
-  <audio bind:this={audioRef} />
+  <audio bind:this={audioRef}></audio>
   <Controls
     {playing}
     disabled={!content}

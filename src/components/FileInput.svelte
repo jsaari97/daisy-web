@@ -83,6 +83,8 @@
     class="container"
     class:dragging
     class:disabled
+    role="region"
+    aria-label="Book upload drop zone"
     on:dragover={handleDragging}
     on:dragleave={handleDragEnd}
     on:drop={handleDragEnd}>

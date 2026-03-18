@@ -1,41 +1,76 @@
-var cacheName = "daisyweb-cache-" + "v0.1.3";
-var filesToCache = [
-  "/",
-  "/index.html",
-  "/global.css",
-  "/build/bundle.js",
-  "/build/bundle.css",
-  "https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap",
+const scopePath = new URL(self.registration.scope).pathname;
+const basePath = scopePath.endsWith("/") ? scopePath : `${scopePath}/`;
+const cacheScope = basePath.replace(/\W+/g, "-");
+const cacheName = `daisyweb-cache-${cacheScope}-v1`;
+const filesToCache = [
+  basePath,
+  `${basePath}index.html`,
+  `${basePath}manifest.json`,
 ];
 
-self.addEventListener("install", function (e) {
+self.addEventListener("install", (event) => {
   self.skipWaiting();
-  e.waitUntil(
-    caches.open(cacheName).then(function (cache) {
+  event.waitUntil(
+    caches.open(cacheName).then((cache) => {
       return cache.addAll(filesToCache);
     })
   );
 });
 
-self.addEventListener("activate", (e) => {
-  e.waitUntil(
-    caches.keys().then(function (cacheNames) {
-      return Promise.all(
-        cacheNames.map(function (thisCacheName) {
-          if (thisCacheName !== cacheName) {
-            return caches.delete(thisCacheName);
-          }
-        })
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    (async () => {
+      const cacheNames = await caches.keys();
+      await Promise.all(
+        cacheNames
+          .filter((name) => name !== cacheName)
+          .map((name) => caches.delete(name))
       );
-    })
+      await self.clients.claim();
+    })()
   );
 });
 
-self.addEventListener("fetch", (e) => {
-  e.respondWith(
-    (async function () {
-      const response = await caches.match(e.request);
-      return response || fetch(e.request);
+self.addEventListener("fetch", (event) => {
+  if (event.request.method !== "GET") {
+    return;
+  }
+
+  const requestUrl = new URL(event.request.url);
+
+  if (requestUrl.origin !== self.location.origin) {
+    return;
+  }
+
+  event.respondWith(
+    (async () => {
+      const cache = await caches.open(cacheName);
+
+      try {
+        const response = await fetch(event.request);
+
+        if (response.ok) {
+          cache.put(event.request, response.clone());
+        }
+
+        return response;
+      } catch (error) {
+        const cachedResponse = await cache.match(event.request);
+
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+
+        if (event.request.mode === "navigate") {
+          const fallback = await cache.match(`${basePath}index.html`);
+
+          if (fallback) {
+            return fallback;
+          }
+        }
+
+        throw error;
+      }
     })()
   );
 });

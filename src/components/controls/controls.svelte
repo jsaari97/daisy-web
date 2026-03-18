@@ -1,9 +1,9 @@
 <script>
   import Button from "./button.svelte";
-  import PlayIcon from "../../svg/play.svg";
-  import PauseIcon from "../../svg/pause.svg";
-  import BackwardIcon from "../../svg/step-backward.svg";
-  import ForwardIcon from "../../svg/skip-forward.svg";
+  import PlayIcon from "../icons/PlayIcon.svelte";
+  import PauseIcon from "../icons/PauseIcon.svelte";
+  import BackwardIcon from "../icons/BackwardIcon.svelte";
+  import ForwardIcon from "../icons/ForwardIcon.svelte";
 
   export let playing = false;
   export let disabled;
@@ -43,7 +43,7 @@
     <Button
       primary
       {disabled}
-      label={playing ? 'Pause' : 'Play'}
+      label={playing ? "Pause" : "Play"}
       icon={playing ? PauseIcon : PlayIcon}
       on:click={onPlayToggle} />
 
