@@ -6,17 +6,12 @@
   "repository": "jsaari97/daisy-web",
   "version": "0.1.3",
   "license": "MIT",
-  "engines": {
-    "node": ">=24.0.0",
-    "npm": ">=11.0.0"
-  },
   "scripts": {
     "build": "vite build",
     "dev": "vite",
     "start": "vite preview",
     "preview": "vite preview",
     "test": "jest",
-    "svg": "svgo -r -f src/svg",
     "sample:fetch": "node scripts/fetch-sample-zip.js",
     "predeploy": "npm run sample:fetch && npm run build",
     "deploy": "gh-pages -d dist"
@@ -30,7 +25,6 @@
     "jest": "^30.3.0",
     "jest-environment-jsdom": "^30.3.0",
     "svelte": "^5.54.0",
-    "svgo": "^4.0.1",
     "vite": "^8.0.0"
   },
   "dependencies": {
