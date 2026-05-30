@@ -6,7 +6,7 @@ A lightweight web-based DAISY 3 standard compatible e-book reader with text-to-s
 
 - Install: `npm ci`
 - Dev server: `npm run dev`
-- Test: `npm test -- --runInBand`
+- Test: `npm test`
 - Production build: `npm run build`
 - Preview production build: `npm run preview`
 
