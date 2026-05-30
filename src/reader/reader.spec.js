@@ -90,4 +90,19 @@ describe("Find previous DOM element", () => {
     expect(lookBackward(item4child)).toBe(span);
     expect(lookBackward(item5child)).toBe(item4span2);
   });
+
+  it("should return null for null input", () => {
+    expect(lookBackward(null)).toBe(null);
+  });
+
+  it("should skip elements without smilref and tcs-marked entries", () => {
+    const list = createElement("ul");
+    const item1 = createElement("li", { smilref: "test" });
+    const item2 = createElement("li");
+    const item3 = createElement("li", { smilref: "test#tcs" });
+
+    list.append(item1, item2, item3);
+
+    expect(lookBackward(item3)).toBe(item1);
+  });
 });

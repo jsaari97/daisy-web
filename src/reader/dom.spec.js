@@ -87,4 +87,32 @@ describe("Transform Lists", () => {
     expect(root.children[0].tagName).toEqual("OL");
     expect(root.children[0].getAttribute("type")).toEqual("a");
   });
+
+  it("should default ordered list enum to 1 when missing", () => {
+    const root = createElement("div");
+    const list = createElement("list", { type: "ol" });
+    const item = createElement("li");
+
+    root.appendChild(list);
+    list.appendChild(item);
+
+    transformList(list);
+
+    expect(root.children[0].tagName).toEqual("OL");
+    expect(root.children[0].getAttribute("type")).toEqual("1");
+  });
+
+  it("should remove type attribute for non-ol lists", () => {
+    const root = createElement("div");
+    const list = createElement("list", { type: "ul", enum: "a" });
+    const item = createElement("li");
+
+    root.appendChild(list);
+    list.appendChild(item);
+
+    transformList(list);
+
+    expect(root.children[0].tagName).toEqual("UL");
+    expect(root.children[0].hasAttribute("type")).toEqual(false);
+  });
 });
