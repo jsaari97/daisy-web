@@ -11,21 +11,18 @@
     "dev": "vite",
     "start": "vite preview",
     "preview": "vite preview",
-    "test": "jest",
+    "test": "vitest run",
     "sample:fetch": "node scripts/fetch-sample-zip.js",
     "predeploy": "npm run sample:fetch && npm run build",
     "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.0",
-    "@babel/preset-env": "^7.29.2",
     "@sveltejs/vite-plugin-svelte": "^7.0.0",
-    "babel-jest": "^30.3.0",
     "gh-pages": "^6.3.0",
-    "jest": "^30.3.0",
-    "jest-environment-jsdom": "^30.3.0",
+    "jsdom": "^29.1.1",
     "svelte": "^5.54.0",
-    "vite": "^8.0.0"
+    "vite": "^8.0.0",
+    "vitest": "^4.1.7"
   },
   "dependencies": {
     "jszip": "^3.10.1",

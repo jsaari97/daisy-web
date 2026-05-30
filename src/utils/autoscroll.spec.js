@@ -1,4 +1,5 @@
-const { autoscroll, OFFSET } = require("./autoscroll");
+import { vi } from "vitest";
+import { autoscroll, OFFSET } from "./autoscroll";
 
 /**
  * @param {{offset: number, height: number}} config
@@ -19,7 +20,7 @@ function mockElement({ height, offset }) {
  * @returns {function}
  */
 function mockDOM({ offset, height }) {
-  const scrollTo = jest.fn();
+  const scrollTo = vi.fn();
 
   Object.defineProperty(window, "pageYOffset", {
     value: offset,
